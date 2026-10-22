@@ -98,6 +98,91 @@
         box-shadow: var(--shadow-soft);
       }
 
+      .account-panel,
+      .auth-panel {
+        background: #fff;
+        border: 1.5px solid var(--border-soft);
+        border-radius: 16px;
+        padding: 14px;
+        margin-bottom: 16px;
+        box-shadow: var(--shadow-soft);
+      }
+
+      .auth-panel h2,
+      .account-panel h2 {
+        color: var(--primary-dark);
+        font-size: 18px;
+        margin-bottom: 6px;
+      }
+
+      .account-form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 12px;
+      }
+
+      .account-input {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1.5px solid var(--border-soft);
+        border-radius: 10px;
+        font-size: 14px;
+        background: var(--bg-cream);
+      }
+
+      .account-actions,
+      .session-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .account-button,
+      .session-action {
+        border: 0;
+        border-radius: 10px;
+        padding: 9px 12px;
+        font-size: 13px;
+        font-weight: 800;
+        cursor: pointer;
+      }
+
+      .account-button.primary {
+        background: var(--secondary-teal);
+        color: #fff;
+      }
+
+      .account-button.secondary,
+      .session-action {
+        background: var(--secondary-teal-light);
+        color: var(--secondary-teal);
+      }
+
+      .session-action.danger {
+        background: #fff0ed;
+        color: var(--danger);
+      }
+
+      .account-status {
+        color: var(--text-muted);
+        font-size: 13px;
+        line-height: 1.6;
+        margin-top: 8px;
+        white-space: pre-wrap;
+      }
+
+      .session-share {
+        background: var(--secondary-teal-light);
+        color: var(--secondary-teal);
+        border-radius: 12px;
+        padding: 10px 12px;
+        margin-bottom: 12px;
+        font-size: 13px;
+        line-height: 1.6;
+      }
+
       .partner-inputs {
         display: flex;
         align-items: center;
@@ -682,6 +767,38 @@
         <p class="logo-subtitle">21 قعدة متسلسلة نفسياً وعاطفياً بدون فجوات</p>
       </header>
 
+      <section id="auth-panel" class="auth-panel">
+        <h2 id="auth-title">دخول حسابكما</h2>
+        <p class="account-status">أنشئا حسابًا مشتركًا بالبريد الإلكتروني وكلمة المرور للوصول إلى إجاباتكما من أجهزتكما.</p>
+        <div id="signup-fields" class="account-form" style="display: none">
+          <input id="auth-username" class="account-input" type="text" autocomplete="username" placeholder="اسم المستخدم الفريد" />
+          <input id="auth-partner1" class="account-input" type="text" placeholder="اسم الشريك الأول" />
+          <input id="auth-partner2" class="account-input" type="text" placeholder="اسم الشريك الثاني" />
+        </div>
+        <div class="account-form">
+          <input id="auth-email" class="account-input" type="email" autocomplete="email" placeholder="البريد الإلكتروني" />
+          <input id="auth-password" class="account-input" type="password" autocomplete="current-password" placeholder="كلمة المرور" />
+          <input id="auth-new-password" class="account-input" type="password" autocomplete="new-password" placeholder="كلمة المرور الجديدة" style="display: none" />
+          <div class="account-actions">
+            <button id="auth-submit" class="account-button primary" onclick="submitAuth()">تسجيل الدخول</button>
+            <button id="auth-toggle" class="account-button secondary" onclick="toggleAuthMode()">إنشاء حساب جديد</button>
+            <button id="auth-reset" class="account-button secondary" onclick="resetPassword()">نسيت كلمة المرور؟</button>
+            <button id="auth-update-password" class="account-button primary" onclick="updatePassword()" style="display: none">حفظ كلمة المرور الجديدة</button>
+          </div>
+        </div>
+        <p id="auth-status" class="account-status" role="status"></p>
+      </section>
+
+      <section id="account-panel" class="account-panel" style="display: none">
+        <h2 id="account-heading">حسابكما</h2>
+        <p class="account-status">رابط الجلسة خاص بحسابكما ويتطلب تسجيل الدخول. لا تشاركا بيانات الدخول مع الآخرين.</p>
+        <div class="account-actions">
+          <button class="account-button secondary" onclick="signOut()">تسجيل الخروج</button>
+        </div>
+        <p id="app-status" class="account-status" role="status"></p>
+      </section>
+
+      <div id="app-content" style="display: none">
       <!-- Partners Setup -->
       <div class="partners-bar">
         <div class="partner-inputs">
@@ -756,6 +873,13 @@
         <div class="top-bar">
           <button class="back-btn" onclick="goHome()">➔ عودة للقعدات</button>
           <span id="card-counter" class="session-counter">كارت 1 من 8</span>
+        </div>
+
+        <div class="session-share">
+          احفظا إجاباتكما على حسابكما، واستخدما رابط الجلسة على أي جهاز بعد تسجيل الدخول.
+          <div class="account-actions">
+            <button class="account-button secondary" onclick="copyCurrentSessionLink()">نسخ رابط الجلسة الخاصة</button>
+          </div>
         </div>
 
         <div class="progress-container">
@@ -834,8 +958,11 @@
           </button>
         </div>
       </main>
+      </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
     <script>
       // Full 7 Moods x 3 Sessions = 21 Sessions (168 Sequenced Questions)
       const gameData = [
@@ -2035,38 +2162,356 @@
       let currentMoodIndex = 0;
       let currentSessionIndex = 0;
       let currentCardIndex = 0;
-      let playMode = localStorage.getItem("kalam_play_mode") || "in"; // 'in' or 'out'
+      let playMode = "in";
       let currentStarter = 1; // 1 or 2
-
-      let partnerNames = JSON.parse(
-        localStorage.getItem("kalam_partners") ||
-          '{"p1":"الشريك الأول","p2":"الشريك الثاني"}',
-      );
-      let savedResponses = JSON.parse(
-        localStorage.getItem("kalam_responses") || "{}",
-      );
-      let completedSessions = JSON.parse(
-        localStorage.getItem("kalam_completed_v2") || "[]",
-      );
+      let partnerNames = { p1: "الشريك الأول", p2: "الشريك الثاني" };
+      let savedResponses = {};
+      let completedSessions = [];
       let editingState = { p1: false, p2: false };
+      let supabaseClient = null;
+      let currentUser = null;
+      let coupleProfile = null;
+      let playSessions = new Map();
+      let currentPlaySession = null;
+      let authMode = "login";
+      let recoveryMode = false;
+      let openedShareLink = false;
 
-      function initApp() {
-        document.getElementById("partner1-name").value = partnerNames.p1;
-        document.getElementById("partner2-name").value = partnerNames.p2;
-        setPlayMode(playMode);
-        renderMoods();
-        updateSavedCount();
+      function escapeHTML(value) {
+        return String(value).replace(/[&<>"']/g, (character) => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;",
+        })[character]);
       }
 
-      function savePartnerNames() {
+      function setAuthStatus(message) {
+        document.getElementById("auth-status").innerText = message;
+      }
+
+      function setAppStatus(message) {
+        document.getElementById("app-status").innerText = message;
+      }
+
+      function getAuthRedirectUrl() {
+        const redirectUrl = new URL(location.pathname, location.origin);
+        const shareToken = new URLSearchParams(location.search).get("share");
+        if (shareToken) redirectUrl.searchParams.set("share", shareToken);
+        return redirectUrl.toString();
+      }
+
+      function setRecoveryMode(enabled) {
+        recoveryMode = enabled;
+        document.getElementById("auth-email").style.display =
+          enabled ? "none" : "block";
+        document.getElementById("auth-password").style.display =
+          enabled ? "none" : "block";
+        document.getElementById("auth-submit").style.display =
+          enabled ? "none" : "inline-block";
+        document.getElementById("auth-toggle").style.display =
+          enabled ? "none" : "inline-block";
+        document.getElementById("auth-reset").style.display =
+          enabled ? "none" : "inline-block";
+        document.getElementById("auth-new-password").style.display =
+          enabled ? "block" : "none";
+        document.getElementById("auth-update-password").style.display =
+          enabled ? "inline-block" : "none";
+        document.getElementById("auth-title").innerText = enabled
+          ? "تعيين كلمة مرور جديدة"
+          : authMode === "signup"
+            ? "إنشاء حساب مشترك"
+            : "دخول حسابكما";
+      }
+
+      function initApp() {
+        const config = window.KALAM_SUPABASE_CONFIG;
+        if (
+          !window.supabase ||
+          !config ||
+          typeof config.url !== "string" ||
+          typeof config.anonKey !== "string" ||
+          !config.url ||
+          !config.anonKey ||
+          config.url.includes("YOUR_") ||
+          config.anonKey.includes("YOUR_")
+        ) {
+          setAuthStatus(
+            "يلزم إعداد مشروع Supabase أولاً. اتبع خطوات الإعداد في README.md ثم حدّث supabase-config.js.",
+          );
+          document.getElementById("auth-submit").disabled = true;
+          document.getElementById("auth-toggle").disabled = true;
+          document.getElementById("auth-reset").disabled = true;
+          return;
+        }
+
+        try {
+          supabaseClient = window.supabase.createClient(
+            config.url,
+            config.anonKey,
+          );
+        } catch (error) {
+          setAuthStatus(`إعداد Supabase غير صالح: ${error.message}`);
+          document.getElementById("auth-submit").disabled = true;
+          document.getElementById("auth-toggle").disabled = true;
+          document.getElementById("auth-reset").disabled = true;
+          return;
+        }
+        setPlayMode(playMode, false);
+        supabaseClient.auth.onAuthStateChange((event, session) => {
+          window.setTimeout(() => {
+            if (event === "INITIAL_SESSION") {
+              return;
+            }
+            if (event === "PASSWORD_RECOVERY") {
+              setRecoveryMode(true);
+              setAuthStatus("أدخل كلمة مرور جديدة لحسابكما.");
+            } else if (session) {
+              loadAccount(session.user).catch((error) =>
+                setAuthStatus(`تعذر تحميل الحساب: ${error.message}`),
+              );
+            } else {
+              clearAccount();
+            }
+          }, 0);
+        });
+        supabaseClient.auth
+          .getSession()
+          .then(({ data, error }) => {
+            if (error) throw error;
+            if (data.session) return loadAccount(data.session.user);
+            if (new URLSearchParams(location.search).has("share")) {
+              setAuthStatus(
+                "سجل الدخول بحساب الزوجين لفتح رابط الجلسة الخاصة.",
+              );
+            }
+          })
+          .catch((error) =>
+            setAuthStatus(`تعذر استعادة تسجيل الدخول: ${error.message}`),
+          );
+      }
+
+      function toggleAuthMode() {
+        authMode = authMode === "login" ? "signup" : "login";
+        document.getElementById("signup-fields").style.display =
+          authMode === "signup" ? "flex" : "none";
+        document.getElementById("auth-submit").innerText =
+          authMode === "signup" ? "إنشاء الحساب" : "تسجيل الدخول";
+        document.getElementById("auth-toggle").innerText =
+          authMode === "signup" ? "لديكما حساب بالفعل" : "إنشاء حساب جديد";
+        setRecoveryMode(recoveryMode);
+        setAuthStatus("");
+      }
+
+      async function submitAuth() {
+        const email = document.getElementById("auth-email").value.trim();
+        const password = document.getElementById("auth-password").value;
+        setAuthStatus("");
+
+        try {
+          if (authMode === "signup") {
+            const username = document
+              .getElementById("auth-username")
+              .value.trim();
+            if (!/^[A-Za-z0-9_-]{3,24}$/.test(username)) {
+              throw new Error(
+                "اسم المستخدم يجب أن يتكون من 3 إلى 24 حرفًا إنجليزيًا أو رقمًا أو _ أو -.",
+              );
+            }
+            const normalizedUsername = username.toLowerCase();
+            if (password.length < 6) {
+              throw new Error("كلمة المرور يجب أن تتكون من 6 أحرف على الأقل.");
+            }
+            const { data, error } = await supabaseClient.auth.signUp({
+              email,
+              password,
+              options: {
+                data: {
+                  username: normalizedUsername,
+                  partner1_name:
+                    document.getElementById("auth-partner1").value.trim() ||
+                    "الشريك الأول",
+                  partner2_name:
+                    document.getElementById("auth-partner2").value.trim() ||
+                    "الشريك الثاني",
+                },
+                emailRedirectTo: getAuthRedirectUrl(),
+              },
+            });
+            if (error) throw error;
+            if (data.session) {
+              setAuthStatus("تم إنشاء الحساب المشترك وتسجيل الدخول.");
+            } else {
+              setAuthStatus(
+                "تم إنشاء الحساب. افتحا رسالة التحقق المرسلة إلى البريد الإلكتروني، ثم سجّلا الدخول.",
+              );
+            }
+            return;
+          }
+
+          const { error } = await supabaseClient.auth.signInWithPassword({
+            email,
+            password,
+          });
+          if (error) throw error;
+        } catch (error) {
+          setAuthStatus(`تعذر إكمال العملية: ${error.message}`);
+        }
+      }
+
+      async function resetPassword() {
+        const email = document.getElementById("auth-email").value.trim();
+        if (!email) {
+          setAuthStatus("أدخل البريد الإلكتروني أولاً لاستعادة كلمة المرور.");
+          return;
+        }
+        try {
+          const { error } = await supabaseClient.auth.resetPasswordForEmail(
+            email,
+            { redirectTo: getAuthRedirectUrl() },
+          );
+          if (error) throw error;
+          setAuthStatus("إذا كان البريد مسجلاً، فستصلكم رسالة لاستعادة كلمة المرور.");
+        } catch (error) {
+          setAuthStatus(`تعذر إرسال رسالة الاستعادة: ${error.message}`);
+        }
+      }
+
+      async function updatePassword() {
+        const password = document.getElementById("auth-new-password").value;
+        if (password.length < 6) {
+          setAuthStatus("كلمة المرور يجب أن تتكون من 6 أحرف على الأقل.");
+          return;
+        }
+        try {
+          const { error } = await supabaseClient.auth.updateUser({ password });
+          if (error) throw error;
+          setRecoveryMode(false);
+          document.getElementById("auth-new-password").value = "";
+          const { data, error: userError } = await supabaseClient.auth.getUser();
+          if (userError) throw userError;
+          await loadAccount(data.user);
+          setAppStatus("تم تحديث كلمة المرور.");
+        } catch (error) {
+          setAuthStatus(`تعذر تحديث كلمة المرور: ${error.message}`);
+        }
+      }
+
+      function clearAccount() {
+        currentUser = null;
+        coupleProfile = null;
+        playSessions = new Map();
+        currentPlaySession = null;
+        openedShareLink = false;
+        savedResponses = {};
+        completedSessions = [];
+        document.getElementById("auth-panel").style.display = "block";
+        document.getElementById("account-panel").style.display = "none";
+        document.getElementById("app-content").style.display = "none";
+        document.getElementById("auth-password").value = "";
+      }
+
+      async function loadAccount(user) {
+        if (currentUser && currentUser.id === user.id) return;
+        const { data: profile, error: profileError } = await supabaseClient
+          .from("couples")
+          .select("id, username, partner1_name, partner2_name, play_mode")
+          .eq("id", user.id)
+          .single();
+        if (profileError) throw profileError;
+
+        const { data: sessions, error: sessionsError } = await supabaseClient
+          .from("shared_sessions")
+          .select("id, couple_id, game_session_id, completed, share_token")
+          .eq("couple_id", user.id);
+        if (sessionsError) throw sessionsError;
+
+        const { data: answers, error: answersError } = await supabaseClient
+          .from("shared_answers")
+          .select("session_id, card_key, partner_key, answer, question, mood_title, session_title, saved_at")
+          .eq("couple_id", user.id);
+        if (answersError) throw answersError;
+
+        currentUser = user;
+        coupleProfile = profile;
+        playSessions = new Map(
+          sessions.map((session) => [session.game_session_id, session]),
+        );
+        savedResponses = {};
+        completedSessions = [];
+        sessions.forEach((session) => {
+          if (session.completed) completedSessions.push(session.game_session_id);
+        });
+        answers.forEach((answer) => {
+          const saved = savedResponses[answer.card_key] || {
+            p1: "",
+            p2: "",
+            q: answer.question,
+            moodTitle: answer.mood_title,
+            sessionTitle: answer.session_title,
+            timestamp: answer.saved_at,
+          };
+          saved[answer.partner_key] = answer.answer;
+          savedResponses[answer.card_key] = saved;
+        });
+        partnerNames = {
+          p1: profile.partner1_name,
+          p2: profile.partner2_name,
+        };
+        playMode = profile.play_mode;
+        document.getElementById("auth-panel").style.display = "none";
+        document.getElementById("account-panel").style.display = "block";
+        document.getElementById("app-content").style.display = "block";
+        document.getElementById("account-heading").innerText =
+          `حساب ${profile.username}`;
+        document.getElementById("partner1-name").value = partnerNames.p1;
+        document.getElementById("partner2-name").value = partnerNames.p2;
+        setAuthStatus("");
+        setAppStatus("");
+        setPlayMode(playMode, false);
+        renderMoods();
+        updateSavedCount();
+
+        const token = new URLSearchParams(location.search).get("share");
+        if (token && !openedShareLink) {
+          openedShareLink = true;
+          await openSharedSession(token);
+        }
+      }
+
+      async function signOut() {
+        try {
+          const { error } = await supabaseClient.auth.signOut();
+          if (error) throw error;
+          clearAccount();
+        } catch (error) {
+          setAppStatus(`تعذر تسجيل الخروج: ${error.message}`);
+        }
+      }
+
+      async function savePartnerNames() {
         const p1 =
           document.getElementById("partner1-name").value.trim() ||
           "الشريك الأول";
         const p2 =
           document.getElementById("partner2-name").value.trim() ||
           "الشريك الثاني";
-        partnerNames = { p1, p2 };
-        localStorage.setItem("kalam_partners", JSON.stringify(partnerNames));
+        try {
+          const { error } = await supabaseClient
+            .from("couples")
+            .update({ partner1_name: p1, partner2_name: p2 })
+            .eq("id", currentUser.id);
+          if (error) throw error;
+          partnerNames = { p1, p2 };
+          coupleProfile.partner1_name = p1;
+          coupleProfile.partner2_name = p2;
+          setAppStatus("تم حفظ الاسمين على حسابكما.");
+        } catch (error) {
+          document.getElementById("partner1-name").value = partnerNames.p1;
+          document.getElementById("partner2-name").value = partnerNames.p2;
+          setAppStatus(`تعذر حفظ الاسمين: ${error.message}`);
+        }
         if (
           document.getElementById("session-view").classList.contains("active")
         ) {
@@ -2079,9 +2524,8 @@
         }
       }
 
-      function setPlayMode(mode) {
+      async function setPlayMode(mode, persist = true) {
         playMode = mode;
-        localStorage.setItem("kalam_play_mode", mode);
 
         // Update buttons on Home & Session
         document
@@ -2101,6 +2545,20 @@
           document.getElementById("session-view").classList.contains("active")
         ) {
           updateCardUI(false);
+        }
+        if (persist && currentUser) {
+          try {
+            const { error } = await supabaseClient
+              .from("couples")
+              .update({ play_mode: mode })
+              .eq("id", currentUser.id);
+            if (error) throw error;
+            coupleProfile.play_mode = mode;
+          } catch (error) {
+            playMode = coupleProfile.play_mode;
+            setPlayMode(playMode, false);
+            setAppStatus(`تعذر حفظ وضع اللعب: ${error.message}`);
+          }
         }
       }
 
@@ -2135,10 +2593,17 @@
           let sessionsHTML = "";
           mood.sessions.forEach((sec, sIdx) => {
             const isDone = completedSessions.includes(sec.id);
+            const savedSession = playSessions.get(sec.id);
             sessionsHTML += `
                     <div class="session-item" onclick="startSession(${mIdx}, ${sIdx})">
-                        <span class="session-item-title">${sec.title}</span>
+                        <span class="session-item-title">${escapeHTML(sec.title)}</span>
                         <span class="session-badge ${isDone ? "done" : ""}">${isDone ? "✓ مكتملة" : "8 كروت ⬅"}</span>
+                        ${savedSession ? `
+                          <div class="session-actions">
+                            <button class="session-action" onclick="event.stopPropagation(); copySessionLink('${sec.id}')">نسخ الرابط الخاص</button>
+                            <button class="session-action danger" onclick="event.stopPropagation(); deletePlaySession('${sec.id}')">حذف الجلسة وإجاباتها</button>
+                          </div>
+                        ` : ""}
                     </div>
                 `;
           });
@@ -2148,8 +2613,8 @@
                     <div class="mood-title-group">
                         <div class="mood-icon">${mood.icon}</div>
                         <div>
-                            <div class="mood-title">${mood.title}</div>
-                            <p class="mood-desc">${mood.desc}</p>
+                            <div class="mood-title">${escapeHTML(mood.title)}</div>
+                            <p class="mood-desc">${escapeHTML(mood.desc)}</p>
                         </div>
                     </div>
                 </div>
@@ -2161,7 +2626,44 @@
         });
       }
 
-      function startSession(mIdx, sIdx) {
+      async function getOrCreatePlaySession(gameSessionId) {
+        const existing = playSessions.get(gameSessionId);
+        if (existing) return existing;
+
+        const { data, error } = await supabaseClient
+          .from("shared_sessions")
+          .insert({
+            couple_id: currentUser.id,
+            game_session_id: gameSessionId,
+          })
+          .select("id, couple_id, game_session_id, completed, share_token")
+          .single();
+        if (error && error.code !== "23505") throw error;
+        if (data) {
+          playSessions.set(gameSessionId, data);
+          return data;
+        }
+
+        const { data: existingAfterConflict, error: fetchError } =
+          await supabaseClient
+            .from("shared_sessions")
+            .select("id, couple_id, game_session_id, completed, share_token")
+            .eq("couple_id", currentUser.id)
+            .eq("game_session_id", gameSessionId)
+            .single();
+        if (fetchError) throw fetchError;
+        playSessions.set(gameSessionId, existingAfterConflict);
+        return existingAfterConflict;
+      }
+
+      async function startSession(mIdx, sIdx) {
+        const gameSessionId = gameData[mIdx].sessions[sIdx].id;
+        try {
+          currentPlaySession = await getOrCreatePlaySession(gameSessionId);
+        } catch (error) {
+          setAppStatus(`تعذر فتح الجلسة: ${error.message}`);
+          return;
+        }
         currentMoodIndex = mIdx;
         currentSessionIndex = sIdx;
         currentCardIndex = 0;
@@ -2172,6 +2674,103 @@
         document.getElementById("session-view").classList.add("active");
 
         updateCardUI(true);
+      }
+
+      async function openSharedSession(token) {
+        try {
+          const { data: sharedSession, error } = await supabaseClient
+            .from("shared_sessions")
+            .select("id, couple_id, game_session_id, completed, share_token")
+            .eq("share_token", token)
+            .maybeSingle();
+          if (error) throw error;
+          if (!sharedSession) {
+            setAppStatus(
+              "لم يُعثر على الجلسة. قد يكون مالكها حذفها، أو قد لا يكون الرابط مخصصًا لهذا الحساب.",
+            );
+            return;
+          }
+          const moodIndex = gameData.findIndex((mood) =>
+            mood.sessions.some(
+              (session) => session.id === sharedSession.game_session_id,
+            ),
+          );
+          if (moodIndex < 0) {
+            setAppStatus("تعذر العثور على محتوى هذه الجلسة.");
+            return;
+          }
+          const sessionIndex = gameData[moodIndex].sessions.findIndex(
+            (session) => session.id === sharedSession.game_session_id,
+          );
+          playSessions.set(sharedSession.game_session_id, sharedSession);
+          currentPlaySession = sharedSession;
+          renderMoods();
+          await startSession(moodIndex, sessionIndex);
+        } catch (error) {
+          setAppStatus(`تعذر فتح رابط الجلسة: ${error.message}`);
+        }
+      }
+
+      async function copySessionLink(gameSessionId) {
+        let shareUrl = "";
+        try {
+          const session = await getOrCreatePlaySession(gameSessionId);
+          const url = new URL(location.href);
+          url.searchParams.set("share", session.share_token);
+          shareUrl = url.toString();
+          await navigator.clipboard.writeText(shareUrl);
+          setAppStatus(
+            "تم نسخ الرابط الخاص. يتطلب فتحه تسجيل الدخول إلى حساب الزوجين، ولا تنتهي صلاحيته إلا عند حذف الجلسة.",
+          );
+          renderMoods();
+        } catch (error) {
+          setAppStatus(
+            shareUrl
+              ? `تعذر النسخ تلقائيًا: ${error.message}\nانسخا الرابط يدويًا: ${shareUrl}`
+              : `تعذر إنشاء رابط الجلسة: ${error.message}`,
+          );
+        }
+      }
+
+      async function copyCurrentSessionLink() {
+        const gameSessionId =
+          gameData[currentMoodIndex].sessions[currentSessionIndex].id;
+        await copySessionLink(gameSessionId);
+      }
+
+      async function deletePlaySession(gameSessionId) {
+        const session = playSessions.get(gameSessionId);
+        if (!session) return;
+        if (
+          !confirm(
+            "سيؤدي حذف الجلسة إلى حذف جميع إجاباتها وإبطال رابطها الخاص. هل تريد المتابعة؟",
+          )
+        ) {
+          return;
+        }
+        try {
+          const { error } = await supabaseClient
+            .from("shared_sessions")
+            .delete()
+            .eq("id", session.id)
+            .eq("couple_id", currentUser.id);
+          if (error) throw error;
+          playSessions.delete(gameSessionId);
+          completedSessions = completedSessions.filter(
+            (sessionId) => sessionId !== gameSessionId,
+          );
+          Object.keys(savedResponses).forEach((key) => {
+            if (key.startsWith(`${gameSessionId}_card_`)) {
+              delete savedResponses[key];
+            }
+          });
+          renderMoods();
+          renderMemories();
+          updateSavedCount();
+          setAppStatus("تم حذف الجلسة وإجاباتها وإبطال رابطها.");
+        } catch (error) {
+          setAppStatus(`تعذر حذف الجلسة: ${error.message}`);
+        }
       }
 
       function getCardKey(mIdx, sIdx, cIdx) {
@@ -2258,6 +2857,8 @@
           const isFirst = idx === 0;
           const ansText = saved[pKey] || "";
           const isEditing = editingState[pKey] || !ansText;
+          const safeName = escapeHTML(pName);
+          const safeAnswer = escapeHTML(ansText);
 
           const box = document.createElement("div");
           box.className = `partner-response-box ${isFirst ? "first-turn" : ""}`;
@@ -2265,7 +2866,7 @@
           let contentHTML = "";
           if (isEditing) {
             contentHTML = `
-                    <textarea id="input-${pKey}" class="pr-textarea" placeholder="اكتب إجابة ${pName} هنا...">${ansText}</textarea>
+                    <textarea id="input-${pKey}" class="pr-textarea" placeholder="اكتب إجابة ${safeName} هنا...">${safeAnswer}</textarea>
                     <div class="pr-actions">
                         <button class="btn-small btn-save" onclick="saveAnswer('${pKey}')">💾 حفظ الرد</button>
                         ${ansText ? `<button class="btn-small btn-delete" onclick="cancelEdit('${pKey}')">إلغاء</button>` : ""}
@@ -2273,7 +2874,7 @@
                 `;
           } else {
             contentHTML = `
-                    <div class="saved-answer-display">${ansText}</div>
+                    <div class="saved-answer-display">${safeAnswer}</div>
                     <div class="pr-actions">
                         <button class="btn-small btn-edit" onclick="enableEdit('${pKey}')">✏️ تعديل</button>
                         <button class="btn-small btn-delete" onclick="deleteAnswer('${pKey}')">🗑️ حذف</button>
@@ -2284,7 +2885,7 @@
           box.innerHTML = `
                 <div class="pr-header">
                     <span class="pr-name">
-                        👤 إجابة ${pName}
+                        👤 إجابة ${safeName}
                         <span class="turn-tag">${isFirst ? "يبدأ أولاً 🎲" : "يجيب ثانياً"}</span>
                     </span>
                 </div>
@@ -2294,7 +2895,7 @@
         });
       }
 
-      function saveAnswer(pKey) {
+      async function saveAnswer(pKey) {
         const textarea = document.getElementById(`input-${pKey}`);
         if (!textarea) return;
         const val = textarea.value.trim();
@@ -2309,22 +2910,67 @@
         const session = mood.sessions[currentSessionIndex];
         const card = session.cards[currentCardIndex];
 
-        if (!savedResponses[key]) {
-          savedResponses[key] = {
+        const updatedAnswer = {
+          ...(savedResponses[key] || {
             p1: "",
             p2: "",
             q: card.q,
             moodTitle: mood.title,
             sessionTitle: session.title,
             timestamp: new Date().toLocaleDateString("ar-EG"),
-          };
+          }),
+        };
+        updatedAnswer[pKey] = val;
+        try {
+          await persistAnswer(key, pKey, updatedAnswer);
+          savedResponses[key] = updatedAnswer;
+          editingState[pKey] = false;
+        } catch (error) {
+          setAppStatus(`تعذر حفظ الإجابة: ${error.message}`);
+          return;
         }
-
-        savedResponses[key][pKey] = val;
-        editingState[pKey] = false;
-        localStorage.setItem("kalam_responses", JSON.stringify(savedResponses));
         updateSavedCount();
         renderInGameResponseBoxes();
+      }
+
+      function findSessionForAnswer(cardKey) {
+        for (const [gameSessionId, session] of playSessions) {
+          if (cardKey.startsWith(`${gameSessionId}_card_`)) return session;
+        }
+        throw new Error("تعذر تحديد الجلسة المرتبطة بهذه الإجابة.");
+      }
+
+      async function persistAnswer(cardKey, partnerKey, item) {
+        const session = findSessionForAnswer(cardKey);
+        if (!item[partnerKey]) {
+          const { error } = await supabaseClient
+            .from("shared_answers")
+            .delete()
+            .eq("session_id", session.id)
+            .eq("couple_id", currentUser.id)
+            .eq("card_key", cardKey)
+            .eq("partner_key", partnerKey);
+          if (error) throw error;
+          return;
+        }
+
+        const { error } = await supabaseClient
+          .from("shared_answers")
+          .upsert(
+            {
+              session_id: session.id,
+              couple_id: currentUser.id,
+              card_key: cardKey,
+              partner_key: partnerKey,
+              answer: item[partnerKey],
+              question: item.q,
+              mood_title: item.moodTitle,
+              session_title: item.sessionTitle,
+              saved_at: item.timestamp,
+            },
+            { onConflict: "session_id,card_key,partner_key" },
+          );
+        if (error) throw error;
       }
 
       function enableEdit(pKey) {
@@ -2337,18 +2983,25 @@
         renderInGameResponseBoxes();
       }
 
-      function deleteAnswer(pKey, customKey = null) {
+      async function deleteAnswer(pKey, customKey = null) {
         const key =
           customKey ||
           getCardKey(currentMoodIndex, currentSessionIndex, currentCardIndex);
         if (!savedResponses[key]) return;
 
-        savedResponses[key][pKey] = "";
-        if (!savedResponses[key].p1 && !savedResponses[key].p2) {
+        const updatedAnswer = { ...savedResponses[key], [pKey]: "" };
+        try {
+          await persistAnswer(key, pKey, updatedAnswer);
+        } catch (error) {
+          setAppStatus(`تعذر حذف الإجابة: ${error.message}`);
+          return;
+        }
+        if (!updatedAnswer.p1 && !updatedAnswer.p2) {
           delete savedResponses[key];
+        } else {
+          savedResponses[key] = updatedAnswer;
         }
 
-        localStorage.setItem("kalam_responses", JSON.stringify(savedResponses));
         updateSavedCount();
 
         if (customKey) {
@@ -2387,7 +3040,9 @@
 
           let answersHTML = "";
           ["p1", "p2"].forEach((pKey) => {
-            const pName = pKey === "p1" ? partnerNames.p1 : partnerNames.p2;
+            const pName = escapeHTML(
+              pKey === "p1" ? partnerNames.p1 : partnerNames.p2,
+            );
             const ans = item[pKey];
             if (ans) {
               answersHTML += `
@@ -2399,15 +3054,15 @@
                                     <button class="btn-small btn-delete" onclick="deleteAnswer('${pKey}', '${key}')">🗑️ حذف</button>
                                 </div>
                             </div>
-                            <div id="mem-text-${key}-${pKey}" style="white-space:pre-wrap; line-height:1.5;">${ans}</div>
+                            <div id="mem-text-${escapeHTML(key)}-${pKey}" style="white-space:pre-wrap; line-height:1.5;">${escapeHTML(ans)}</div>
                         </div>
                     `;
             }
           });
 
           card.innerHTML = `
-                <div class="memory-meta">${item.moodTitle || ""} • ${item.sessionTitle || ""}</div>
-                <div class="memory-q">${item.q}</div>
+                <div class="memory-meta">${escapeHTML(item.moodTitle || "")} • ${escapeHTML(item.sessionTitle || "")}</div>
+                <div class="memory-q">${escapeHTML(item.q || "")}</div>
                 <div class="memory-answers">${answersHTML}</div>
             `;
           container.appendChild(card);
@@ -2417,7 +3072,7 @@
       function editMemoryPrompt(key, pKey) {
         const container = document.getElementById(`mem-text-${key}-${pKey}`);
         if (!container) return;
-        const currentVal = savedResponses[key][pKey];
+        const currentVal = escapeHTML(savedResponses[key][pKey]);
 
         container.innerHTML = `
             <textarea id="mem-input-${key}-${pKey}" class="pr-textarea" style="margin-top:6px;">${currentVal}</textarea>
@@ -2428,30 +3083,46 @@
         `;
       }
 
-      function saveMemoryEdit(key, pKey) {
+      async function saveMemoryEdit(key, pKey) {
         const input = document.getElementById(`mem-input-${key}-${pKey}`);
         if (!input) return;
         const newVal = input.value.trim();
         if (!newVal) return;
 
-        savedResponses[key][pKey] = newVal;
-        localStorage.setItem("kalam_responses", JSON.stringify(savedResponses));
+        const updatedAnswer = { ...savedResponses[key], [pKey]: newVal };
+        try {
+          await persistAnswer(key, pKey, updatedAnswer);
+        } catch (error) {
+          setAppStatus(`تعذر حفظ التعديل: ${error.message}`);
+          return;
+        }
+        savedResponses[key] = updatedAnswer;
         renderMemories();
       }
 
-      function nextCard() {
+      async function nextCard() {
         const session =
           gameData[currentMoodIndex].sessions[currentSessionIndex];
         if (currentCardIndex < session.cards.length - 1) {
           currentCardIndex++;
           updateCardUI(true);
         } else {
-          if (!completedSessions.includes(session.id)) {
-            completedSessions.push(session.id);
-            localStorage.setItem(
-              "kalam_completed_v2",
-              JSON.stringify(completedSessions),
-            );
+          try {
+            const playSession =
+              currentPlaySession || (await getOrCreatePlaySession(session.id));
+            const { error } = await supabaseClient
+              .from("shared_sessions")
+              .update({ completed: true })
+              .eq("id", playSession.id)
+              .eq("couple_id", currentUser.id);
+            if (error) throw error;
+            playSession.completed = true;
+            if (!completedSessions.includes(session.id)) {
+              completedSessions.push(session.id);
+            }
+          } catch (error) {
+            setAppStatus(`تعذر حفظ اكتمال الجلسة: ${error.message}`);
+            return;
           }
           goHome();
         }
