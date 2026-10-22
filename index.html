@@ -1,0 +1,2477 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>كلام يفتح كلام - النسخة التفاعلية المتكاملة</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg-cream: #fdf8f2;
+        --card-bg: #ffffff;
+        --primary-coral: #e86a58;
+        --primary-coral-light: #fff0ed;
+        --primary-dark: #1e2d2f;
+        --secondary-teal: #2a6f68;
+        --secondary-teal-light: #e9f5f3;
+        --accent-yellow: #f4b942;
+        --text-main: #2c3539;
+        --text-muted: #6e7a7e;
+        --border-soft: #efe6dd;
+        --shadow-soft: 0 10px 30px rgba(30, 45, 47, 0.07);
+        --danger: #d9534f;
+        --success: #27ae60;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Cairo", sans-serif;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      body {
+        background-color: var(--bg-cream);
+        color: var(--text-main);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        overflow-x: hidden;
+      }
+
+      .app-container {
+        width: 100%;
+        max-width: 520px;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        padding: 18px 16px 40px;
+      }
+
+      /* Header */
+      .header {
+        text-align: center;
+        margin-bottom: 18px;
+      }
+
+      .badge-top {
+        display: inline-block;
+        background-color: var(--secondary-teal);
+        color: #fff;
+        font-size: 11.5px;
+        font-weight: 700;
+        padding: 4px 14px;
+        border-radius: 20px;
+        margin-bottom: 6px;
+      }
+
+      .logo-title {
+        font-size: 30px;
+        font-weight: 900;
+        color: var(--primary-coral);
+        line-height: 1.2;
+        margin-bottom: 4px;
+      }
+
+      .logo-subtitle {
+        font-size: 13.5px;
+        color: var(--text-muted);
+        font-weight: 600;
+      }
+
+      /* Partner Setup Bar */
+      .partners-bar {
+        background: #ffffff;
+        border: 1.5px solid var(--border-soft);
+        border-radius: 16px;
+        padding: 12px 14px;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        box-shadow: var(--shadow-soft);
+      }
+
+      .partner-inputs {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex: 1;
+      }
+
+      .partner-input {
+        width: 100%;
+        padding: 6px 10px;
+        border: 1.5px solid var(--border-soft);
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--primary-dark);
+        text-align: center;
+        background: var(--bg-cream);
+        transition: border 0.2s;
+      }
+
+      .partner-input:focus {
+        outline: none;
+        border-color: var(--primary-coral);
+        background: #fff;
+      }
+
+      .heart-sep {
+        color: var(--primary-coral);
+        font-size: 16px;
+      }
+
+      /* Navigation Tabs */
+      .nav-tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 18px;
+      }
+
+      .nav-tab {
+        flex: 1;
+        padding: 10px;
+        border-radius: 14px;
+        border: 1.5px solid var(--border-soft);
+        background: #fff;
+        font-size: 13.5px;
+        font-weight: 800;
+        color: var(--text-muted);
+        cursor: pointer;
+        transition: all 0.2s;
+        text-align: center;
+      }
+
+      .nav-tab.active {
+        background: var(--primary-dark);
+        color: #fff;
+        border-color: var(--primary-dark);
+      }
+
+      /* Views */
+      .view {
+        display: none;
+        flex-direction: column;
+        flex: 1;
+        animation: fadeIn 0.3s ease;
+      }
+
+      .view.active {
+        display: flex;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(6px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Mode Toggle Box (In-Game vs Out-Game) */
+      .response-mode-selector {
+        background: #fff;
+        border: 1.5px solid var(--border-soft);
+        border-radius: 16px;
+        padding: 10px;
+        margin-bottom: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        box-shadow: var(--shadow-soft);
+      }
+
+      .mode-label {
+        font-size: 12.5px;
+        font-weight: 800;
+        color: var(--primary-dark);
+        text-align: center;
+      }
+
+      .mode-buttons {
+        display: flex;
+        gap: 8px;
+      }
+
+      .mode-btn {
+        flex: 1;
+        padding: 8px 10px;
+        border-radius: 12px;
+        border: 1.5px solid var(--border-soft);
+        background: var(--bg-cream);
+        font-size: 12.5px;
+        font-weight: 700;
+        color: var(--text-muted);
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .mode-btn.active {
+        background: var(--primary-coral-light);
+        border-color: var(--primary-coral);
+        color: var(--primary-coral);
+        font-weight: 800;
+      }
+
+      /* Moods List & Sessions Accordion */
+      .moods-list {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .mood-card {
+        background: var(--card-bg);
+        border: 1.5px solid var(--border-soft);
+        border-radius: 20px;
+        padding: 16px;
+        box-shadow: var(--shadow-soft);
+        transition: all 0.2s;
+      }
+
+      .mood-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+      }
+
+      .mood-title-group {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .mood-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        background: var(--bg-cream);
+        flex-shrink: 0;
+      }
+
+      .mood-title {
+        font-size: 17px;
+        font-weight: 800;
+        color: var(--primary-dark);
+      }
+
+      .mood-desc {
+        font-size: 12.5px;
+        color: var(--text-muted);
+        margin-top: 2px;
+      }
+
+      .sessions-sublist {
+        margin-top: 14px;
+        padding-top: 12px;
+        border-top: 1px dashed var(--border-soft);
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .session-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: var(--bg-cream);
+        padding: 10px 14px;
+        border-radius: 12px;
+        cursor: pointer;
+        border: 1px solid transparent;
+        transition: all 0.2s;
+      }
+
+      .session-item:hover {
+        border-color: var(--primary-coral);
+        background: #fff;
+      }
+
+      .session-item-title {
+        font-size: 13.5px;
+        font-weight: 700;
+        color: var(--primary-dark);
+      }
+
+      .session-badge {
+        font-size: 11px;
+        font-weight: 700;
+        padding: 3px 9px;
+        border-radius: 10px;
+        background: #fff;
+        color: var(--secondary-teal);
+        border: 1px solid var(--border-soft);
+      }
+
+      .session-badge.done {
+        background: var(--secondary-teal);
+        color: #fff;
+      }
+
+      /* Active Game Session View */
+      .top-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+      }
+
+      .back-btn {
+        background: #fff;
+        border: 1.5px solid var(--border-soft);
+        color: var(--primary-dark);
+        padding: 7px 13px;
+        border-radius: 12px;
+        font-size: 12.5px;
+        font-weight: 800;
+        cursor: pointer;
+      }
+
+      .session-counter {
+        font-size: 12.5px;
+        font-weight: 800;
+        color: var(--secondary-teal);
+        background: var(--secondary-teal-light);
+        padding: 6px 12px;
+        border-radius: 12px;
+      }
+
+      .progress-container {
+        width: 100%;
+        height: 7px;
+        background: #eae0d5;
+        border-radius: 10px;
+        margin-bottom: 14px;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          var(--secondary-teal),
+          var(--primary-coral)
+        );
+        width: 12.5%;
+        transition: width 0.3s ease;
+      }
+
+      /* Random Starter Banner */
+      .starter-banner {
+        background: linear-gradient(135deg, #2a6f68 0%, #1e4e49 100%);
+        color: #fff;
+        padding: 10px 14px;
+        border-radius: 14px;
+        margin-bottom: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 6px 16px rgba(42, 111, 104, 0.2);
+      }
+
+      .starter-info {
+        font-size: 13px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .starter-name {
+        background: var(--accent-yellow);
+        color: var(--primary-dark);
+        padding: 2px 10px;
+        border-radius: 8px;
+        font-weight: 900;
+      }
+
+      .reroll-btn {
+        background: rgba(255, 255, 255, 0.18);
+        border: none;
+        color: #fff;
+        padding: 5px 10px;
+        border-radius: 8px;
+        font-size: 11.5px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      /* Question Card */
+      .question-card {
+        background: var(--card-bg);
+        border: 2px solid var(--border-soft);
+        border-radius: 24px;
+        padding: 22px 18px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-shadow: 0 14px 34px rgba(30, 45, 47, 0.08);
+        margin-bottom: 16px;
+        text-align: center;
+      }
+
+      .card-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px dashed var(--border-soft);
+        padding-bottom: 10px;
+      }
+
+      .depth-badge {
+        font-size: 11.5px;
+        font-weight: 800;
+        padding: 4px 11px;
+        border-radius: 20px;
+      }
+
+      .depth-light {
+        background: #e9f7ef;
+        color: #1e8449;
+      }
+      .depth-personal {
+        background: #fef5e7;
+        color: #b9770e;
+      }
+      .depth-deep {
+        background: #fdedec;
+        color: #c0392b;
+      }
+      .depth-closing {
+        background: #f4ecf7;
+        color: #7d3c98;
+      }
+
+      .psych-goal {
+        font-size: 11.5px;
+        color: var(--text-muted);
+        font-weight: 700;
+      }
+
+      .question-text {
+        font-size: 19.5px;
+        font-weight: 800;
+        color: var(--primary-dark);
+        line-height: 1.6;
+        margin: 22px 0;
+      }
+
+      /* Out-of-game Hint */
+      .out-game-box {
+        background: var(--bg-cream);
+        border-radius: 14px;
+        padding: 12px;
+        font-size: 12.5px;
+        color: var(--text-muted);
+        font-weight: 600;
+        line-height: 1.5;
+      }
+
+      /* In-Game Response Area */
+      .in-game-responses {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 8px;
+        text-align: right;
+      }
+
+      .partner-response-box {
+        background: var(--bg-cream);
+        border: 1.5px solid var(--border-soft);
+        border-radius: 16px;
+        padding: 12px;
+      }
+
+      .partner-response-box.first-turn {
+        border-color: var(--secondary-teal);
+        background: #f4faf9;
+      }
+
+      .pr-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+
+      .pr-name {
+        font-size: 13px;
+        font-weight: 800;
+        color: var(--primary-dark);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .turn-tag {
+        font-size: 10.5px;
+        padding: 2px 8px;
+        border-radius: 6px;
+        background: var(--secondary-teal);
+        color: #fff;
+      }
+
+      .pr-textarea {
+        width: 100%;
+        min-height: 70px;
+        border: 1px solid var(--border-soft);
+        border-radius: 10px;
+        padding: 8px 10px;
+        font-size: 13px;
+        resize: vertical;
+        background: #fff;
+        margin-bottom: 8px;
+      }
+
+      .pr-textarea:focus {
+        outline: none;
+        border-color: var(--primary-coral);
+      }
+
+      .saved-answer-display {
+        background: #fff;
+        padding: 10px 12px;
+        border-radius: 10px;
+        font-size: 13.5px;
+        color: var(--text-main);
+        line-height: 1.5;
+        margin-bottom: 8px;
+        border-right: 3px solid var(--primary-coral);
+        white-space: pre-wrap;
+      }
+
+      .pr-actions {
+        display: flex;
+        gap: 6px;
+        justify-content: flex-end;
+      }
+
+      .btn-small {
+        padding: 5px 12px;
+        border-radius: 8px;
+        font-size: 11.5px;
+        font-weight: 700;
+        border: none;
+        cursor: pointer;
+      }
+
+      .btn-save {
+        background: var(--secondary-teal);
+        color: #fff;
+      }
+      .btn-edit {
+        background: var(--accent-yellow);
+        color: var(--primary-dark);
+      }
+      .btn-delete {
+        background: #fdedec;
+        color: var(--danger);
+      }
+
+      /* Controls */
+      .controls {
+        display: flex;
+        gap: 10px;
+        margin-top: auto;
+      }
+
+      .btn {
+        flex: 1;
+        padding: 14px;
+        border-radius: 16px;
+        font-size: 14.5px;
+        font-weight: 800;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s;
+      }
+
+      .btn-prev {
+        background: #eae0d5;
+        color: var(--primary-dark);
+        flex: 0.4;
+      }
+
+      .btn-prev:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+
+      .btn-next {
+        background: var(--primary-coral);
+        color: #fff;
+        box-shadow: 0 6px 16px rgba(232, 106, 88, 0.25);
+      }
+
+      /* Saved Memories View */
+      .memories-list {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .memory-card {
+        background: #fff;
+        border: 1.5px solid var(--border-soft);
+        border-radius: 18px;
+        padding: 16px;
+        box-shadow: var(--shadow-soft);
+      }
+
+      .memory-meta {
+        font-size: 11.5px;
+        font-weight: 700;
+        color: var(--primary-coral);
+        margin-bottom: 6px;
+      }
+
+      .memory-q {
+        font-size: 15px;
+        font-weight: 800;
+        color: var(--primary-dark);
+        margin-bottom: 12px;
+        line-height: 1.5;
+      }
+
+      .memory-answers {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .memory-ans-item {
+        background: var(--bg-cream);
+        padding: 10px 12px;
+        border-radius: 12px;
+        font-size: 13px;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: var(--text-muted);
+        background: #fff;
+        border-radius: 20px;
+        border: 1.5px dashed var(--border-soft);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- Header -->
+      <header class="header">
+        <span class="badge-top">لعبة محادثة وتوثيق ذكريات للشريكين</span>
+        <h1 class="logo-title">كلام يفتح كلام</h1>
+        <p class="logo-subtitle">21 قعدة متسلسلة نفسياً وعاطفياً بدون فجوات</p>
+      </header>
+
+      <!-- Partners Setup -->
+      <div class="partners-bar">
+        <div class="partner-inputs">
+          <input
+            type="text"
+            id="partner1-name"
+            class="partner-input"
+            placeholder="اسم الشريك الأول"
+            onchange="savePartnerNames()"
+          />
+          <span class="heart-sep">🤍</span>
+          <input
+            type="text"
+            id="partner2-name"
+            class="partner-input"
+            placeholder="اسم الشريك الثاني"
+            onchange="savePartnerNames()"
+          />
+        </div>
+      </div>
+
+      <!-- Main Navigation Tabs -->
+      <div id="main-nav" class="nav-tabs">
+        <button
+          id="tab-moods"
+          class="nav-tab active"
+          onclick="switchTab('moods')"
+        >
+          🗂️ المودات والقعدات (21)
+        </button>
+        <button
+          id="tab-memories"
+          class="nav-tab"
+          onclick="switchTab('memories')"
+        >
+          📖 سجل ردودنا (<span id="saved-count">0</span>)
+        </button>
+      </div>
+
+      <!-- HOME VIEW: Moods & Sessions -->
+      <main id="home-view" class="view active">
+        <div class="response-mode-selector">
+          <span class="mode-label">اختر نظام الرد المفضل لكما الآن:</span>
+          <div class="mode-buttons">
+            <button
+              id="mode-in-btn"
+              class="mode-btn active"
+              onclick="setPlayMode('in')"
+            >
+              ✍️ الرد داخل اللعبة (كتابة وحفظ)
+            </button>
+            <button
+              id="mode-out-btn"
+              class="mode-btn"
+              onclick="setPlayMode('out')"
+            >
+              💬 الرد خارج اللعبة (حوار شفهي)
+            </button>
+          </div>
+        </div>
+
+        <div id="moods-container" class="moods-list"></div>
+      </main>
+
+      <!-- MEMORIES VIEW: All Saved Responses -->
+      <main id="memories-view" class="view">
+        <div id="memories-container" class="memories-list"></div>
+      </main>
+
+      <!-- SESSION VIEW: Active Cards -->
+      <main id="session-view" class="view">
+        <div class="top-bar">
+          <button class="back-btn" onclick="goHome()">➔ عودة للقعدات</button>
+          <span id="card-counter" class="session-counter">كارت 1 من 8</span>
+        </div>
+
+        <div class="progress-container">
+          <div id="progress-fill" class="progress-fill"></div>
+        </div>
+
+        <!-- Quick Mode Switcher Inside Session -->
+        <div
+          class="response-mode-selector"
+          style="margin-bottom: 12px; padding: 8px"
+        >
+          <div class="mode-buttons">
+            <button
+              id="session-mode-in"
+              class="mode-btn active"
+              onclick="setPlayMode('in')"
+            >
+              ✍️ الرد داخل اللعبة
+            </button>
+            <button
+              id="session-mode-out"
+              class="mode-btn"
+              onclick="setPlayMode('out')"
+            >
+              💬 الرد خارج اللعبة
+            </button>
+          </div>
+        </div>
+
+        <!-- Random Starter Banner -->
+        <div class="starter-banner">
+          <div class="starter-info">
+            <span>🎲 القرعة اختارت يبدأ الأول:</span>
+            <span id="random-starter-name" class="starter-name"
+              >الشريك الأول</span
+            >
+          </div>
+          <button class="reroll-btn" onclick="pickRandomStarter(true)">
+            🔄 قرعة جديدة
+          </button>
+        </div>
+
+        <!-- Question Card -->
+        <div id="question-wrapper">
+          <div class="question-card">
+            <div class="card-meta">
+              <span id="depth-badge" class="depth-badge depth-light"
+                >مستوى خفيف</span
+              >
+              <span id="psych-goal" class="psych-goal">كسر الجليد</span>
+            </div>
+
+            <div id="question-text" class="question-text"></div>
+
+            <!-- Out of Game Mode Box -->
+            <div id="out-game-area" class="out-game-box" style="display: none">
+              🎙️ <strong>وضع الحوار الخارجي:</strong> يبدأ
+              <span
+                id="out-starter-inline"
+                style="color: var(--primary-coral); font-weight: 800"
+              ></span>
+              بالإجابة بصوت مسموع، ثم يستمع للطرف الآخر بحب وفضول!
+            </div>
+
+            <!-- In Game Mode Box (Save, Edit, Delete) -->
+            <div id="in-game-area" class="in-game-responses"></div>
+          </div>
+        </div>
+
+        <div id="controls-bar" class="controls">
+          <button id="prev-btn" class="btn btn-prev" onclick="prevCard()">
+            السابق
+          </button>
+          <button id="next-btn" class="btn btn-next" onclick="nextCard()">
+            السؤال التالي ⬅
+          </button>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      // Full 7 Moods x 3 Sessions = 21 Sessions (168 Sequenced Questions)
+      const gameData = [
+        {
+          id: "laugh",
+          title: "نضحك سوا",
+          icon: "😄",
+          desc: "قعدات خفيفة تفتح مواقف عفوية وتخلي الضحك يجر كلام دافي.",
+          sessions: [
+            {
+              id: "laugh_1",
+              title: "القعدة 1: تفاصيلنا اليومية الغريبة",
+              cards: [
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "فتح كلام وكسر الجليد",
+                  q: "لو حياتك اليومية كانت فيلم كوميدي، إيه أكتر موقف بيتكرر معاك كل يوم وينفع يكون مشهد في الفيلم؟",
+                },
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "مشاركة العفوية",
+                  q: "إيه أغرب عادة بتعملها وإنت لوحدك في البيت، وبتحس إن محدش غيرك بيعملها؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "قوة الملاحظة",
+                  q: "من خلال معرفتك بيا لحد دلوقتي، تفتكر إيه أكتر جملة أنا بكررها في كلامي من غير ما آخذ بالي؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "خيال مشترك",
+                  q: "لو صحينا يوم ولقينا نفسنا بدلنا شخصياتنا لمدة 24 ساعة، إيه أول حاجة هتعملها بشخصيتي وهتضحكك؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "ذكريات البدايات",
+                  q: "إيه أكتر موقف حصل بينا في البداية وكان محرج وقتها، بس دلوقتي كل ما تفتكره تبتسم؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "مفاتيح البهجة",
+                  q: "وسط ضغوط اليوم، إيه التصرف التلقائي أو البسيط اللي لو عملته قدامك بيقدر يغير مودك ويضحكك فوراً؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "الراحة النفسية",
+                  q: "كل إنسان فيه جانب عفوي طفولي، إمتى بتحس إنك مرتاح تطلع الجانب ده قدامي من غير أي تحفظ؟",
+                },
+                {
+                  depth: "ختام دافئ ✨",
+                  depthClass: "depth-closing",
+                  goal: "رابط خاص",
+                  q: "لو هنختار «كلمة سر» أو إشارة بينا نستخدمها وسط الناس عشان نفهم بعض ونضحك من غير ما حد ياخد باله، تحب تكون إيه؟",
+                },
+              ],
+            },
+            {
+              id: "laugh_2",
+              title: "القعدة 2: مواقف لا تُنسى وخيال كوميدي",
+              cards: [
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "مواقف مضحكة",
+                  q: "إيه أكتر أكلة حاولت تعملها أو تطلبها وطلعت كارثة غير متوقعة؟",
+                },
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "تفضيلات طريفة",
+                  q: "لو دخلنا مسابقة تليفزيونية سوا، تفتكر هنكسب في إيه، وهنخسر في إيه من أول دقيقة؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "ملاحظة الطباع",
+                  q: "لما بكونجعان أو نعسان، شكلي وطريقة كلامي بيتغيروا إزاي من وجهة نظرك؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "مغامرة افتراضية",
+                  q: "لو سافرنا مكان جديد وتهنا فيه من غير موبايلات، مين فينا هيتوتر ومين هيقلب الموضوع ضحك؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "روح الفكاهة",
+                  q: "إيه أكتر إفيه أو نكتة بينا بقينا بنقولها في أوقات محدش غيرنا بيفهمها؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "تخفيف الأعباء",
+                  q: "إزاي وجود روح الدعابة بينا بيساعدنا نعدي المواقف التقيلة من غير ما نكبرها؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "البهجة في العلاقة",
+                  q: "إيه اللحظة اللي شفتني فيها بضحك من قلبي بجد، وحسيت وقتها إن ضحكتي فرقت معاك؟",
+                },
+                {
+                  depth: "ختام دافئ ✨",
+                  depthClass: "depth-closing",
+                  goal: "وعد مبهج",
+                  q: "إيه الحاجة المجنونة أو المبهجة اللي تحب نعملها سوا قريب عشان نكسر بيها أي روتين؟",
+                },
+              ],
+            },
+            {
+              id: "laugh_3",
+              title: "القعدة 3: عفويتنا والجانب الطفولي",
+              cards: [
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "ذكريات طريفة",
+                  q: "إيه الكرتون أو اللعبة اللي كنت بتعشقها وإنت صغير، ولسه لو شفتها دلوقتي هتتحمس؟",
+                },
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "عفوية الاختيار",
+                  q: "لو معانا تذكرة ملاهي مفتوحة ليوم كامل، إيه أول لعبة هتجري عليها وإيه اللعبة اللي هتخاف تركبها؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "رؤية الشريك",
+                  q: "إيه التصرف العفوي اللي بعمله أحياناً وبيحسسك إني لسه محتفظ ببراءة الأطفال؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "مواقف مشتركة",
+                  q: "لو عملنا مقلب لطيف في حد من معارفنا، مين فينا هيكون العقل المدبر ومين هيكشفنا بضحكته؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "تقبل العفوية",
+                  q: "إيه الحاجة اللي كنت بتتكسف تعملها زمان، بس معايا بقيت بتعملها بتلقائية؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "الأمان في التلقائية",
+                  q: "ليه في رأيك الإنسان مش بيقدر يكون عفوي وعلى طبيعته غير مع الشخص اللي بيحبه وبيأمنله؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "الحفاظ على الروح",
+                  q: "إزاي نقدر نحافظ على روحنا الخفيفة دي حتى بعد سنين من المسؤوليات والشغل؟",
+                },
+                {
+                  depth: "ختام دافئ ✨",
+                  depthClass: "depth-closing",
+                  goal: "امتنان للبهجة",
+                  q: "قولي حاجة واحدة في خفة دمك أو روحك بتخليني دايماً مشتاق أقعد وأتكلم معاك.",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          id: "mirror",
+          title: "في عيون بعض",
+          icon: "🪞",
+          desc: "اكتشاف الانطباعات المتبادلة، وماذا يظن كل طرف بالآخر بصدق.",
+          sessions: [
+            {
+              id: "mirror_1",
+              title: "القعدة 1: الانطباع الأول والصورة الذهنية",
+              cards: [
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "الانطباع الأول",
+                  q: "أول مرة شفتني أو اتكلمنا فيها، إيه أول فكرة جت في بالك عني، وهل طلعت صح ولا غلط؟",
+                },
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "الصورة الذهنية",
+                  q: "لو هتوصف شخصيتي بـ 3 كلمات بس لشخص ميعرفنيش خالص، هتختار إيه؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "قراءة الآخر",
+                  q: "تفتكر إيه أكتر صفة فيا أنا بفتخر بيها، وإيه الصفة اللي بحاول أخبيها ومش بحب حد يلاحظها؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "اختبار الفهم",
+                  q: "لو أنا في موقف ضغط شديد أو زعل، تفتكر من ملاحظتك ليا بفضل العزلة والسكوت ولا الكلام والفضفضة؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "التقدير المتبادل",
+                  q: "إيه الصفة اللي شفتها فيك غيرت نظرتي عن فكرة الارتباط أو خلتني أحس إنك فعلاً مختلف؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "كشف الجوهر",
+                  q: "أحياناً الإنسان بيبان عكس اللي جواه؛ إيه الحاجة اللي بتحس إن الناس فاهماها غلط عنك، ونفسك أكون أنا فاهمها صح؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "الشعور بالأهمية",
+                  q: "لما بتبص في تصرفاتي معاك، إيه أكتر فعل بعمله بيخليك تقول بينك وبين نفسك: «أنا فعلاً فارق معاه»؟",
+                },
+                {
+                  depth: "ختام دافئ ✨",
+                  depthClass: "depth-closing",
+                  goal: "امتنان وتقارب",
+                  q: "بعد ما سمعنا بعض، إيه أجمل حاجة اكتشفت النهارده إني شايفها فيك ومكنتش متخيل إني واخد بالي منها؟",
+                },
+              ],
+            },
+            {
+              id: "mirror_2",
+              title: "القعدة 2: ماذا تظن بي؟ وقراءة المشاعر",
+              cards: [
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "تخمين التفضيلات",
+                  q: "لو هتختارلي هدية دلوقتي من غير ما تسألني، تفتكر إيه أكتر حاجة هتفرحني؟",
+                },
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "قراءة الملامح",
+                  q: "إزاي بتعرف من نبرة صوتي أو ملامح وشي إني مبسوط بجد أو إني بجامل؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "توقعات الشخصية",
+                  q: "في رأيك، إيه أكتر نقطة قوة في شخصيتي بتعتمد عليا فيها، وإيه نقطة الضعف اللي بتحس إنك عايز تسندني فيها؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "ماذا تظن بي",
+                  q: "تفتكر إيه أكتر حاجة بتشغل تفكيري وبتقلقني في الفترة دي من حياتي؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "نظرة الإعجاب",
+                  q: "إمتى بتبصلي في موقف معين وبتحس بإعجاب أو فخر إني شريك حياتك؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "المرآة العاطفية",
+                  q: "هل بتحس إني بشوفك وبقدرك زي ما إنت بتشوف نفسك، ولا ساعات بشوف فيك حاجات أحلى إنت مش واخد بالك منها؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "الشفافية الكاملة",
+                  q: "إيه السؤال اللي كان نفسك تسألهولي عن نظرتي ليك وكنت متردد، وعايز تسمع إجابته دلوقتي؟",
+                },
+                {
+                  depth: "ختام دافئ ✨",
+                  depthClass: "depth-closing",
+                  goal: "تعزيز الثقة",
+                  q: "قولي جملة تطمن بيها قلبي عن مكانتي في عينك مهما عدى علينا وقت.",
+                },
+              ],
+            },
+            {
+              id: "mirror_3",
+              title: "القعدة 3: ما وراء الظاهر والفهم العميق",
+              cards: [
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "عادات الكلام",
+                  q: "إيه الكلمة أو التعبير اللي بقيت بتقوله زيي من كتر ما بنتكلم سوا؟",
+                },
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "تشابه الطباع",
+                  q: "إيه أكتر حاجة اكتشفت إننا متشابهين فيها بالظبط ومكنتش متوقعها؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "فهم الصمت",
+                  q: "لما بسكت فجأة وسط الكلام، تفتكر بكون بفكر في إيه في أغلب الأوقات؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "تأثير الشريك",
+                  q: "إزاي وجودي في حياتك غير نظرتك لنفسك أو خلاك تكتشف جوانب جديدة في شخصيتك؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "احترام الاختلاف",
+                  q: "إيه الصفة المختلفة بينا اللي في الأول استغربتها، بس دلوقتي بقيت بتحبها وبتشوفها ميزة؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "الفهم دون كلام",
+                  q: "إمتى حسيت إني فهمت اللي جواك من غير ما تضطر تشرح أو تبرر بكلمة واحدة؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "القبول غير المشروط",
+                  q: "إيه معنى إن الإنسان يكون «مكشوف ومفهوم» قدام شريكه ومع ذلك حاسس بأمان كامل؟",
+                },
+                {
+                  depth: "ختام دافئ ✨",
+                  depthClass: "depth-closing",
+                  goal: "امتنان للفهم",
+                  q: "إيه أكتر موقف أثبتلك إني فعلاً حافظ تفاصيلك وبفهمك من نظرة عين؟",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          id: "dream_partner",
+          title: "شريك أحلامي",
+          icon: "🌟",
+          desc: "طموحاتنا في شريك الحياة (الهدوء، حب القراءة، الحنان) وكيف ننميها معاً.",
+          sessions: [
+            {
+              id: "dream_1",
+              title: "القعدة 1: صورة شريك الأحلام بين الخيال والواقع",
+              cards: [
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "خيال ما قبل التعارف",
+                  q: "قبل ما نتقابل، لما كنت بتسرح بخيالك في شكل شريك حياتك المستقبلي، إيه أول تفصيلة صغيرة كانت بتيجي في بالك؟",
+                },
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "أسلوب الحياة المفضل",
+                  q: "فيه ناس بتحلم بشريك هادي بيحب القراءة والقهوة، وناس بتتمنى شريك مغامر واجتماعي؛ إيه الجو العام اللي كنت دايماً بتتمنى تعيشه مع شريكك؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "الصفات الملهمة",
+                  q: "إيه الصفة أو العادة الإيجابية اللي لما بتشوفها في شريك حياتك بتحس بإعجاب شديد، وبتتمنى تفضل موجودة في حياتكم؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "التشابه أم التكامل",
+                  q: "هل بتميل أكتر إن شريكك يكون شبهك في الطباع والهدوء، ولا يكمل الجانب اللي ناقصك، وليه؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "بناء عادات مشتركة",
+                  q: "لو هنتعلم عادة جديدة أو هواية نمارسها سوا (زي قراءة كتاب كل شهر، أو رياضة، أو سفر)، إيه أكتر حاجة تطمح إننا نشاركها؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "مفهوم العطف والحنان",
+                  q: "كل واحد فينا ليه تعريف خاص لكلمة «إنسان عطوف وحنين»؛ إزاي بتشوف العطف في المواقف اليومية البسيطة؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "النمو المشترك",
+                  q: "الحب بيخلينا نحب نتطور؛ إيه الصفة اللي بتطمح إننا ننميها في نفسنا سوا عشان نكون أقرب لصورة الشريك اللي كل واحد فينا بيحلم بيه؟",
+                },
+                {
+                  depth: "ختام دافئ ✨",
+                  depthClass: "depth-closing",
+                  goal: "طمأنينة القلب",
+                  q: "من بين كل الصفات اللي كنت بتحلم بيها في شريك حياتك زمان، إيه أكتر صفة لقيتها فيا وطمنتك؟",
+                },
+              ],
+            },
+            {
+              id: "dream_2",
+              title: "القعدة 2: الهدوء، الثقافة، والعادات الملهمة",
+              cards: [
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "أوقات الهدوء",
+                  q: "إزاي بتتخيل قعدة هادية ومثالية بينا آخر الأسبوع بعد أسبوع شغل طويل؟",
+                },
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "الاهتمامات الفكرية",
+                  q: "إيه المواضيع أو المجالات اللي بتحب تقرأ أو تسمع عنها، وتحب نناقشها سوا؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "طموح في الشريك",
+                  q: "لما بتتمنى شريك حياتك يكون «إنسان واعي ومثقف وهادي»، إزاي ده بينعكس في رأيك على جمال الحوار بينكم؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "تشجيع الطموح",
+                  q: "إزاي تحب أشجعك عشان تحقق أهدافك الشخصية أو تطور هواية بتحبها؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "القدوة الحسنة",
+                  q: "إيه العادة الحلوة اللي عندك ونفسك تعديني بيها، وإيه العادة اللي عندي ونفسك تكتسبها مني؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "السكينة النفسية",
+                  q: "الإنسان الهادي بيخلق حواليه سلام؛ إزاي نقدر نكون مصدر هدوء وسكينة لبعض وقت الأزمات؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "تقبل وتطوير",
+                  q: "إزاي نطلب من بعض التطور في صفة معينة بحب وتشجيع من غير ما نحسس الطرف التاني بالنقد؟",
+                },
+                {
+                  depth: "ختام دافئ ✨",
+                  depthClass: "depth-closing",
+                  goal: "إلهام متبادل",
+                  q: "إيه أكتر حاجة في شخصيتي بتلهمك وبتخليك عايز تكون نسخة أحسن من نفسك؟",
+                },
+              ],
+            },
+            {
+              id: "dream_3",
+              title: "القعدة 3: الحنان، الاحتواء، والنمو المشترك",
+              cards: [
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "تعبيرات الود",
+                  q: "إيه اللقب أو الكلمة اللطيفة اللي بتحب تسمعها من شريك حياتك كل يوم؟",
+                },
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "مواقف اللطف",
+                  q: "إيه التصرف البسيط اللي لو شريكك عملهولك وإنت راجع تعبان هيحسسك بقمة الحنان؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "صورة الشريك الحنون",
+                  q: "في خيالك، إزاي بيتصرف الشريك العطوف لما يلاقي الطرف التاني مضغوط أو متعصب؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "الدعم المعنوي",
+                  q: "إمتى بتحس إن شريك حياتك هو فعلاً «ضهرك وسندك» في الدنيا؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "المرونة العاطفية",
+                  q: "إيه الحاجة اللي اتعلمت تغيرها في طبعك عشان تسعدني وتقرب مني أكتر؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "عمق الاحتواء",
+                  q: "إيه الفرق في نظرك بين شريك بيسمعك كواجب، وشريك بيحتويك بقلبه وروحه؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "رحلة العمر",
+                  q: "إزاي نضمن إننا نكبر سوا في الفكر والحنان ومشاعرنا تزيد نضج وجمال مع السنين؟",
+                },
+                {
+                  depth: "ختام دافئ ✨",
+                  depthClass: "depth-closing",
+                  goal: "رسالة تقدير",
+                  q: "لو هتشكرني النهارده على صفة جميلة بحاول أقدمها في علاقتنا، هتشكرني على إيه؟",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          id: "discover",
+          title: "نكتشف بعض أكتر",
+          icon: "🧭",
+          desc: "اختبارات غير مباشرة للشخصية، المواقف، وطريقة التفكير واتخاذ القرار.",
+          sessions: [
+            {
+              id: "discover_1",
+              title: "القعدة 1: بوصلة القرارات وطريقة التفكير",
+              cards: [
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "التخطيط أم العفوية",
+                  q: "في يوم إجازة مثالي مفيش فيه أي التزامات، عقلك بيختار التخطيط لكل ساعة ولا ترك اليوم يمشي بالصدفة؟",
+                },
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "الأولويات",
+                  q: "لو معاك مبلغ مالي إضافي دلوقتي، تميل أكتر تصرفه في تجربة جديدة (سفر أو خروجة) ولا تشتري حاجة مادية، ولا تدخره؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "الطاقة الاجتماعية",
+                  q: "في التجمعات الكبيرة، بتعتبر نفسك الشخص اللي بيسمع ويراقب بهدوء، ولا اللي بيبدأ الكلام ويحرك القعدة؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "المرونة مع المفاجآت",
+                  q: "لو خططنا لحاجة بحماس وفجأة الظروف اتغيرت في آخر لحظة، إيه بيكون أول رد فعل جواك؟ وإزاي بتتجاوز الإحباط؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "روافد الفكر",
+                  q: "إيه أكتر كتاب، أو فكرة، أو شخص أثر في طريقة تفكيرك وخلاك تشوف الدنيا بشكل أنضج؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "العقل والقلب",
+                  q: "لما بتقف قدام قرار صعب في حياتك، بنسبة كام في المية بتمشي ورا عقلك والمنطق، وكام في المية ورا قلبك وإحساسك؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "القيم الثابتة",
+                  q: "إيه المبدأ أو القيمة الأخلاقية اللي مستحيل تتنازل عنها مهما كانت المغريات أو الضغوط؟",
+                },
+                {
+                  depth: "ختام دافئ ✨",
+                  depthClass: "depth-closing",
+                  goal: "تكامل الشخصيتين",
+                  q: "بعد الأسئلة دي، إيه أكتر ميزة في طريقة تفكيري حاسس إنها هتفيدنا وتقوينا في حياتنا الجاية سوا؟",
+                },
+              ],
+            },
+            {
+              id: "discover_2",
+              title: "القعدة 2: التعامل مع الضغوط والمواقف الصعبة",
+              cards: [
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "تصفية الذهن",
+                  q: "لما يكون يومك مشحون وتعبان، إيه أسرع حاجة بتفصل بيها دماغك وترجع طاقتك؟",
+                },
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "الصبر والتحمل",
+                  q: "على مقياس من 1 لـ 10، بتقيم صبرك كام في الزحمة أو الانتظار الطويل؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "إدارة الغضب",
+                  q: "لما بتتنرفز أو تتضايق من موقف بره، إزاي بتمنع نفسك إنك تخرج الطاقة السلبية دي في الناس اللي بتحبهم؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "مواجهة المشكلات",
+                  q: "هل بطبعك بتميل لمواجهة المشكلة وحلها في وقتها فوراً، ولا بتحب تاخد وقت تهدى وتفكر الأول؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "التعلم من الأخطاء",
+                  q: "لما بتكتشف إنك خدت قرار غلط، هل بتلوم نفسك كتير ولا بتتقبل الموقف وتدور على البديل؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "الصلابة النفسية",
+                  q: "إيه مصدر القوة الأساسي اللي بتسند عليه لما تحس إن الظروف صعبة أو ملخبطة؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "المساندة في الأزمات",
+                  q: "إزاي نكون فريق واحد وقت الأزمات بحيث نسند بعض من غير ما طرف يحمل التاني فوق طاقته؟",
+                },
+                {
+                  depth: "ختام دافئ ✨",
+                  depthClass: "depth-closing",
+                  goal: "ثقة في الشريك",
+                  q: "إيه الموقف اللي شفتك بتتصرف فيه بحكمة وخلاني أحس إني مطمن على مستقبلنا سوا؟",
+                },
+              ],
+            },
+            {
+              id: "discover_3",
+              title: "القعدة 3: فلسفتنا في الحياة ومعنى السعادة",
+              cards: [
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "بهجة التفاصيل",
+                  q: "إيه الحاجة البسيطة جداً والمجانية اللي بتقدر تخليك مبتسم ومبسوط؟",
+                },
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "الروتين والتجديد",
+                  q: "هل بتحب الاستقرار والنظام الثابت أكتر، ولا التغيير المستمر والمفاجآت؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "مفهوم النجاح",
+                  q: "في نظرك، إيه المعنى الحقيقي للإنسان الناجح في حياته بعيداً عن المظاهر؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "العلاقات الاجتماعية",
+                  q: "بتفضل يكون عندك دايرة أصحاب صغيرة وقريبة جداً، ولا معارف كتير في كل مكان؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "التوازن الحياتي",
+                  q: "إزاي بتقدر توازن بين طموحك في الشغل وبين وقتك لراحتك وللناس اللي بتحبهم؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "جوهر السعادة",
+                  q: "بعد تجاربك في الحياة، وصلت لإيه عن معنى «راحة البال» وإزاي الإنسان يوصلها؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "الأثر في الحياة",
+                  q: "إيه الأثر الطيب اللي بتتمنى تسيبه في حياة كل شخص بيتعامل معاك؟",
+                },
+                {
+                  depth: "ختام دافئ ✨",
+                  depthClass: "depth-closing",
+                  goal: "انسجام الأرواح",
+                  q: "إيه أكتر قيمة جميلة في شخصيتك بتخليني فخور إننا هنكمل رحلة الحياة سوا؟",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          id: "memories",
+          title: "حكايتنا وذكرياتنا",
+          icon: "📖",
+          desc: "الغوص في المحطات والذكريات التي شكلت أرواحنا وبداية قصتنا.",
+          sessions: [
+            {
+              id: "memories_1",
+              title: "القعدة 1: محطات الطفولة وذكريات الأمان",
+              cards: [
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "حنين الطفولة",
+                  q: "إيه أكتر ذكرى من طفولتك لما بتفتكرها بتحس بدفء وأمان، وبتتمنى لو ترجع تعيشها ساعة واحدة؟",
+                },
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "أحلام قديمة",
+                  q: "إيه الحلم أو الهواية اللي كنت متعلق بيها وإنت صغير، ولما كبرت اتغيرت أو نسيتها؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "الامتنان",
+                  q: "مين الشخص اللي في حياتك كان ليه بصمة حقيقية في إنك تكون الإنسان اللي قدامي النهارده؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "النضج من التجارب",
+                  q: "إيه التجربة الصعبة اللي مريت بيها في حياتك، ورغم تعبها وقتها، بتحس دلوقتي إنها علمتك أهم درس؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "شرارة البداية",
+                  q: "نرجع لحكايتنا؛ إيه اللحظة المحددة اللي حسيت فيها إن الكلام بينا مبقاش عادي، وإن فيه رابط حقيقي بيتكون؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "التصالح مع الذات",
+                  q: "لو تقدر تبعت رسالة لنفسك من 5 سنين، هتقولها إيه؟ وهتطمنها إزاي؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "الأثر العاطفي",
+                  q: "إيه الحاجة اللي كانت ناقصاك أو بتدور عليها في حياتك قبل ما نتقابل، ولما اتعرفنا حسيت إنك لقيتها؟",
+                },
+                {
+                  depth: "ختام دافئ ✨",
+                  depthClass: "depth-closing",
+                  goal: "توثيق اللحظة",
+                  q: "لو هنوثق المرحلة اللي بنعيشها دلوقتي بعنوان لكتاب، تحب نسمي الفصل ده إيه؟",
+                },
+              ],
+            },
+            {
+              id: "memories_2",
+              title: "القعدة 2: تجارب شكلت نضجنا وشخصيتنا",
+              cards: [
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "أيام الدراسة",
+                  q: "إيه أكتر موقف من أيام المدرسة أو الجامعة لسه معلم في ذاكرتك لحد النهارده؟",
+                },
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "أول إنجاز",
+                  q: "إيه أول نجاح أو إنجاز عملته في حياتك وحسيت وقتها بفخر حقيقي بنفسك؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "تغير النظرة",
+                  q: "إيه القناعة أو الفكرة اللي كنت متمسك بيها زمان، ولما كبرت اكتشفت إنك محتاج تغيرها؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "مواقف فارقة",
+                  q: "احكيلي عن يوم في حياتك قبل ما نتعرف غير مسار تفكيرك أو خلاك تاخد قرار مصيري.",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "تقدير الذات",
+                  q: "إيه الحاجة اللي عديت بيها لوحدك وخلتك تكتشف إنك أقوى مما كنت تتخيل؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "الشفاء العاطفي",
+                  q: "إزاي التجارب اللي مرينا بيها في الماضي جهزتنا عشان نقدر بعض ونحافظ على علاقتنا النهارده؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "العوض الجميل",
+                  q: "إمتى بصيت لرحلة حياتك اللي فاتت وقلت من قلبك: «الحمد لله، كل ده كان ترتيب عشان أوصل للحظة دي»؟",
+                },
+                {
+                  depth: "ختام دافئ ✨",
+                  depthClass: "depth-closing",
+                  goal: "احترام الرحلة",
+                  q: "إيه أكتر حاجة سمعتها عن ماضيك وتجاربك النهارده خلتني أحترمك وأحبك أكتر؟",
+                },
+              ],
+            },
+            {
+              id: "memories_3",
+              title: "القعدة 3: شرارة بدايتنا وأجمل لحظاتنا",
+              cards: [
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "أول لقاء",
+                  q: "فاكر كنت لابس إيه أو كنت حاسس بإيه في أول مقابلة أو مكالمة طويلة بينا؟",
+                },
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "تفاصيل محفوظة",
+                  q: "إيه أول هدية أو رسالة أو تفصيلة صغيرة بينا لسه محتفظ بيها في ذاكرتك؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "تطور المشاعر",
+                  q: "إيه الموقف اللي حصل بينا وخلاك تتأكد إن مشاعرك ناحيتي مش مجرد إعجاب عابر؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "أجمل خروجة",
+                  q: "من بين كل الأوقات اللي قضيناها سوا، إيه اليوم اللي لو بإيدك تعيده بكل تفاصيله هتختاره؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "تخطي أول عقبة",
+                  q: "إيه أول خلاف أو سوء تفاهم عدينا بيه سوا، وإزاي طريقتنا في حله قربتنا أكتر؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "الامتنان للقدر",
+                  q: "لما بتفتكر الطريقة اللي اتعرفنا بيها، إيه أكتر حاجة بتحس إن ربنا رتبها بلطف عشان تجمعنا؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "صناعة الذكريات",
+                  q: "إيه الذكرى الجديدة اللي نفسك نصنعها سوا في الشهور الجاية عشان نفضل نحكي عنها سنين؟",
+                },
+                {
+                  depth: "ختام دافئ ✨",
+                  depthClass: "depth-closing",
+                  goal: "رسالة حب",
+                  q: "لو هتختصر حكايتنا من أول يوم لحد اللحظة دي في جملة واحدة، هتقول إيه؟",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          id: "closer",
+          title: "نقرب أكتر",
+          icon: "🤍",
+          desc: "العمق العاطفي، لغات الحب، المخاوف الخفية، وما يشعرنا بالأمان.",
+          sessions: [
+            {
+              id: "closer_1",
+              title: "القعدة 1: لغات الحب وتفاصيل الاهتمام",
+              cards: [
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "لغات الحب",
+                  q: "إيه الطريقة الأسهل بالنسبالك عشان تعبر عن اهتمامك: الكلام الحلو، الأفعال والمساندة، الهدايا، ولا قضاء وقت سوا؟",
+                },
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "تفاصيل الاهتمام",
+                  q: "إيه التفصيلة البسيطة (رسالة الصبح، سؤال وسط اليوم، كلمة معينة) اللي بتفرق في يومك جداً؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "طريقة الاحتواء",
+                  q: "لما بتكون مضغوط أو زعلان، بتحتاج من شريكك إيه بالظبط: نصيحة وحلول، ولا مجرد استماع واحتواء من غير كلام كتير؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "النقاط الحساسة",
+                  q: "إيه الكلمة أو التصرف اللي ممكن يبان للناس عادي، بس بالنسبالك بيلمس نقطة حساسة وبيزعلك؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "مفاتيح الصلح",
+                  q: "لما يحصل سوء تفاهم، إيه الطريقة اللي لما الطرف التاني بيصالحك بيها بتحس إن قلبك صفي فوراً؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "طمأنة المخاوف",
+                  q: "في أي علاقة قريبة بيكون فيه خوف صغير جوه القلب؛ إيه أكتر حاجة بتخاف منها، وإزاي نقدر نطمن بعض منها؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "معنى الأمان",
+                  q: "كلمة «أمان» كلمة كبيرة؛ إمتى بتحس معايا إنك في أمان تام وإنك مش محتاج تجامل أو تتصنع؟",
+                },
+                {
+                  depth: "ختام دافئ ✨",
+                  depthClass: "depth-closing",
+                  goal: "رسالة من القلب",
+                  q: "قول جملة واحدة دلوقتي توصف بيها قد إيه وجود الطرف التاني في حياتك فارق ومطمنك.",
+                },
+              ],
+            },
+            {
+              id: "closer_2",
+              title: "القعدة 2: الاحتواء وقت الزعل ومفاتيح القلوب",
+              cards: [
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "علامات الرضا",
+                  q: "إيه الأكلة أو المشروب اللي لو جبتهولك وإنت زعلان هتفك التكشيرة فوراً؟",
+                },
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "التعبير عن الشوق",
+                  q: "لما بتشتاقلي وإحنا بعاد عن بعض، إيه أول حاجة بتعملها؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "فهم طبيعة الزعل",
+                  q: "لما بتتضايق مني في موقف، هل بتفضل تقولي في ساعتها ولا بتستنى لما تهدى عشان ترتب كلامك؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "العتاب المحب",
+                  q: "إزاي نعاتب بعض بطريقة تحسس الطرف التاني بالحب والغلاوة مش باللوم والهجوم؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "تقدير المشاعر",
+                  q: "إيه الموقف اللي كنت متضايق فيه ولما اتكلمت معايا حسيت إن همك خف وقلبك ارتاح؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "الضعف الإنساني",
+                  q: "كل إنسان بيمر بلحظات ضعف وتعب؛ إزاي تحب أكون جنبك في اللحظات اللي مش بتكون فيها في أحسن حالاتك؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "تجاوز الخلاف",
+                  q: "إزاي نخلي أي خلاف بسيط بينا ينتهي وإحنا أقرب لبعض من الأول ومفيش أي رواسب في القلب؟",
+                },
+                {
+                  depth: "ختام دافئ ✨",
+                  depthClass: "depth-closing",
+                  goal: "عهد الحنان",
+                  q: "إيه الوعد اللطيف اللي تحب تقطعه لقلبي وقت ما أكون تعبان أو مضغوط؟",
+                },
+              ],
+            },
+            {
+              id: "closer_3",
+              title: "القعدة 3: الصراحة العميقة والشفافية العاطفية",
+              cards: [
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "لحظات السعادة",
+                  q: "إيه أكتر وقت في اليوم بتحب نتكلم فيه وبتحس إننا رايقين وقريبين؟",
+                },
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "الكلمات الدافئة",
+                  q: "إيه أكتر جملة قلتها لك قبل كده وفضلت معلقة في أذنك وقلبك فترة طويلة؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "الإفصاح عن المشاعر",
+                  q: "هل بتعتبر نفسك شخص بيعرف يعبر عن مشاعره بالكلام بسهولة، ولا أفعالك بتتكلم عنك أكتر؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "الاحتياج غير المعلن",
+                  q: "إيه الحاجة اللي ساعات بتكون محتاجها مني بس بتتكسف تطلبها مباشرة؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "الطمأنينة المستمرة",
+                  q: "إزاي نفضل نحسس بعض بالاهتمام والإعجاب حتى وسط انشغالات الحياة اليومية؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "عمق الارتباط",
+                  q: "إيه المعنى الحقيقي لجملة «إنت سكني وراحتي» من وجهة نظرك وإحساسك؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "حماية المشاعر",
+                  q: "إيه الحاجة اللي لو التزمنا بيها سوا هتحافظ على دفء مشاعرنا طول العمر؟",
+                },
+                {
+                  depth: "ختام دافئ ✨",
+                  depthClass: "depth-closing",
+                  goal: "اعتراف صادق",
+                  q: "بص في عيني أو اكتبلي دلوقتي: إيه أكتر حاجة بتخليك تحمد ربنا إننا في حياة بعض؟",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          id: "important",
+          title: "نتكلم في المهم",
+          icon: "🏡",
+          desc: "المستقبل، شكل البيت، الإدارة المالية، الحدود الصحية، وتجاوز الصعاب.",
+          sessions: [
+            {
+              id: "important_1",
+              title: "القعدة 1: روح بيتنا المستقبلي والمشاركة اليومية",
+              cards: [
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "روح البيت",
+                  q: "لما بتتخيل بيتنا المستقبلي، إيه أهم شعور تحب أي حد يدخل البيت يحس بيه؟ وإيه الروتين اليومي اللي تحب نحافظ عليه؟",
+                },
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "المشاركة والتعاون",
+                  q: "في تفاصيل الحياة اليومية ومسؤوليات البيت، إزاي بتشوف مفهوم «المشاركة والتعاون» بين الزوجين؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "الإدارة المالية",
+                  q: "الفلوس وسيلة مهمة للاستقرار؛ إيه نظرتك لإدارة الميزانية بين التوفير للمستقبل والاستمتاع بالحاضر؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "الخصوصية والعائلة",
+                  q: "الأهل جزء غالي في حياتنا؛ إزاي نقدر نرسم حدود صحية تحافظ على خصوصية بيتنا وفي نفس الوقت ترضي أهالينا بود؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "قواعد وقت الزعل",
+                  q: "الخلاف شيء طبيعي بين أي اتنين؛ إيه «القانون الذهبي» اللي تحب نتفق عليه من دلوقتي عشان نلتزم بيه وقت أي خلاف؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "تجديد الشغف",
+                  q: "لو حسينا في يوم إن ضغوط الحياة والروتين أخذتنا والكلام بينا قل، إزاي ننبه بعض بحب ونرجع القرب تاني؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "الرؤية المستقبلية",
+                  q: "بعد 10 سنين من دلوقتي، إيه الشكل اللي لو وصلنا له سوا هتقول: «إحنا نجحنا في بناء العلاقة اللي حلمنا بيها»؟",
+                },
+                {
+                  depth: "ختام دافئ ✨",
+                  depthClass: "depth-closing",
+                  goal: "عهد مشترك",
+                  q: "إيه الوعد الصادق اللي تحب نقطعه على بعض في نهاية القعدة دي ويكون أساس لرحلتنا الجاية؟",
+                },
+              ],
+            },
+            {
+              id: "important_2",
+              title: "القعدة 2: القرارات الكبرى، المال، والحدود الصحية",
+              cards: [
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "أولويات المشتريات",
+                  q: "لما نيجي نجهز أو نشتري حاجة جديدة للبيت، بتهتم أكتر بالشكل والجمال ولا بالعملية والجودة؟",
+                },
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "المناسبات والأعياد",
+                  q: "إزاي بتحب تقضي الأعياد والمناسبات العائلية، وإيه الطقس اللي تحب نعمله في بيتنا؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "الشفافية المالية",
+                  q: "إزاي نتخذ القرارات المالية الكبيرة سوا بطريقة تريحنا إحنا الاتنين وتمنع أي سوء تفاهم؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "حفظ الأسرار",
+                  q: "إيه معنى «أسرار البيت» بالنسبالك، وإزاي نحمي تفاصيلنا من أي تدخل خارجي مهما كان قريب؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "الأوقات الخاصة",
+                  q: "إزاي نوازن بين زيارات الأهل والأصحاب وبين إن يكون لينا وقتنا الخاص المقدس كل أسبوع؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "الأزمات المادية",
+                  q: "لو مرينا بضائقة مالية أو ظرف صعب في الشغل، إزاي هنتعامل معاه كفريق واحد بيدعم بعضه؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "اتخاذ القرار المشترك",
+                  q: "لو اختلفنا في قرار مهم يخص مستقبلنا، إيه الآلية الهادية اللي نوصل بيها لحل يرضينا إحنا الاتنين؟",
+                },
+                {
+                  depth: "ختام دافئ ✨",
+                  depthClass: "depth-closing",
+                  goal: "الاطمئنان للنضج",
+                  q: "إيه أكتر فكرة ناضجة سمعتها مني في القعدة دي خلتك مطمن على طريقة إدارتنا لبيتنا؟",
+                },
+              ],
+            },
+            {
+              id: "important_3",
+              title: "القعدة 3: دستور الخلافات وأحلامنا للمستقبل",
+              cards: [
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "كسر الروتين",
+                  q: "إيه العادة الأسبوعية أو الشهرية اللي تحب نثبتها في حياتنا بعد الجواز عشان نجدد طاقتنا؟",
+                },
+                {
+                  depth: "خفيف 🌱",
+                  depthClass: "depth-light",
+                  goal: "السفر والأحلام",
+                  q: "إيه البلد أو المكان اللي بتحلم نسافر له سوا ونعمل فيه ذكريات مختلفة؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "أدب الخلاف",
+                  q: "إيه الكلمات أو التصرفات الممنوعة تماماً وقت الزعل مهما كنا متعصبين؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "المبادرة بالصلح",
+                  q: "إزاي نسهل على بعض خطوة الصلح والاعتذار من غير كبر أو عناد؟",
+                },
+                {
+                  depth: "شخصي 🧡",
+                  depthClass: "depth-personal",
+                  goal: "القيم التربوية",
+                  q: "لما ربنا يرزقنا بأطفال في المستقبل، إيه أهم قيمة أو صفة نفسك نزرعها فيهم من صغرهم؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "النمو المهني والشخصي",
+                  q: "إزاي هنساعد بعض إن كل واحد فينا يفضل يحقق ذاته وطموحه بعد الجواز؟",
+                },
+                {
+                  depth: "أعمق ❤️",
+                  depthClass: "depth-deep",
+                  goal: "المودة والرحمة",
+                  q: "آية «وجعل بينكم مودة ورحمة»؛ إزاي نترجم المودة والرحمة دول لأفعال حقيقية في بيتنا كل يوم؟",
+                },
+                {
+                  depth: "ختام دافئ ✨",
+                  depthClass: "depth-closing",
+                  goal: "دعاء وأمنية",
+                  q: "إيه الدعوة أو الأمنية اللي بتتمناها لينا من قلبك وإحنا بنبني حياتنا الجاية سوا؟",
+                },
+              ],
+            },
+          ],
+        },
+      ];
+
+      // App State
+      let currentMoodIndex = 0;
+      let currentSessionIndex = 0;
+      let currentCardIndex = 0;
+      let playMode = localStorage.getItem("kalam_play_mode") || "in"; // 'in' or 'out'
+      let currentStarter = 1; // 1 or 2
+
+      let partnerNames = JSON.parse(
+        localStorage.getItem("kalam_partners") ||
+          '{"p1":"الشريك الأول","p2":"الشريك الثاني"}',
+      );
+      let savedResponses = JSON.parse(
+        localStorage.getItem("kalam_responses") || "{}",
+      );
+      let completedSessions = JSON.parse(
+        localStorage.getItem("kalam_completed_v2") || "[]",
+      );
+      let editingState = { p1: false, p2: false };
+
+      function initApp() {
+        document.getElementById("partner1-name").value = partnerNames.p1;
+        document.getElementById("partner2-name").value = partnerNames.p2;
+        setPlayMode(playMode);
+        renderMoods();
+        updateSavedCount();
+      }
+
+      function savePartnerNames() {
+        const p1 =
+          document.getElementById("partner1-name").value.trim() ||
+          "الشريك الأول";
+        const p2 =
+          document.getElementById("partner2-name").value.trim() ||
+          "الشريك الثاني";
+        partnerNames = { p1, p2 };
+        localStorage.setItem("kalam_partners", JSON.stringify(partnerNames));
+        if (
+          document.getElementById("session-view").classList.contains("active")
+        ) {
+          updateCardUI(false);
+        }
+        if (
+          document.getElementById("memories-view").classList.contains("active")
+        ) {
+          renderMemories();
+        }
+      }
+
+      function setPlayMode(mode) {
+        playMode = mode;
+        localStorage.setItem("kalam_play_mode", mode);
+
+        // Update buttons on Home & Session
+        document
+          .getElementById("mode-in-btn")
+          .classList.toggle("active", mode === "in");
+        document
+          .getElementById("mode-out-btn")
+          .classList.toggle("active", mode === "out");
+        document
+          .getElementById("session-mode-in")
+          .classList.toggle("active", mode === "in");
+        document
+          .getElementById("session-mode-out")
+          .classList.toggle("active", mode === "out");
+
+        if (
+          document.getElementById("session-view").classList.contains("active")
+        ) {
+          updateCardUI(false);
+        }
+      }
+
+      function switchTab(tab) {
+        document
+          .getElementById("tab-moods")
+          .classList.toggle("active", tab === "moods");
+        document
+          .getElementById("tab-memories")
+          .classList.toggle("active", tab === "memories");
+
+        document
+          .getElementById("home-view")
+          .classList.toggle("active", tab === "moods");
+        document
+          .getElementById("memories-view")
+          .classList.toggle("active", tab === "memories");
+        document.getElementById("session-view").classList.remove("active");
+
+        if (tab === "memories") renderMemories();
+        if (tab === "moods") renderMoods();
+      }
+
+      function renderMoods() {
+        const container = document.getElementById("moods-container");
+        container.innerHTML = "";
+
+        gameData.forEach((mood, mIdx) => {
+          const card = document.createElement("div");
+          card.className = "mood-card";
+
+          let sessionsHTML = "";
+          mood.sessions.forEach((sec, sIdx) => {
+            const isDone = completedSessions.includes(sec.id);
+            sessionsHTML += `
+                    <div class="session-item" onclick="startSession(${mIdx}, ${sIdx})">
+                        <span class="session-item-title">${sec.title}</span>
+                        <span class="session-badge ${isDone ? "done" : ""}">${isDone ? "✓ مكتملة" : "8 كروت ⬅"}</span>
+                    </div>
+                `;
+          });
+
+          card.innerHTML = `
+                <div class="mood-header">
+                    <div class="mood-title-group">
+                        <div class="mood-icon">${mood.icon}</div>
+                        <div>
+                            <div class="mood-title">${mood.title}</div>
+                            <p class="mood-desc">${mood.desc}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="sessions-sublist">
+                    ${sessionsHTML}
+                </div>
+            `;
+          container.appendChild(card);
+        });
+      }
+
+      function startSession(mIdx, sIdx) {
+        currentMoodIndex = mIdx;
+        currentSessionIndex = sIdx;
+        currentCardIndex = 0;
+
+        document.getElementById("main-nav").style.display = "none";
+        document.getElementById("home-view").classList.remove("active");
+        document.getElementById("memories-view").classList.remove("active");
+        document.getElementById("session-view").classList.add("active");
+
+        updateCardUI(true);
+      }
+
+      function getCardKey(mIdx, sIdx, cIdx) {
+        const session = gameData[mIdx].sessions[sIdx];
+        return `${session.id}_card_${cIdx}`;
+      }
+
+      function pickRandomStarter(forceNew = false) {
+        currentStarter = Math.random() < 0.5 ? 1 : 2;
+        const starterName =
+          currentStarter === 1 ? partnerNames.p1 : partnerNames.p2;
+        const bannerName = document.getElementById("random-starter-name");
+        bannerName.innerText = starterName;
+        document.getElementById("out-starter-inline").innerText = starterName;
+
+        if (forceNew) {
+          updateCardUI(false);
+        }
+      }
+
+      function updateCardUI(pickNewRandom = true) {
+        const mood = gameData[currentMoodIndex];
+        const session = mood.sessions[currentSessionIndex];
+        const card = session.cards[currentCardIndex];
+
+        if (pickNewRandom) {
+          editingState = { p1: false, p2: false };
+          pickRandomStarter(false);
+        } else {
+          const starterName =
+            currentStarter === 1 ? partnerNames.p1 : partnerNames.p2;
+          document.getElementById("random-starter-name").innerText =
+            starterName;
+          document.getElementById("out-starter-inline").innerText = starterName;
+        }
+
+        document.getElementById("card-counter").innerText =
+          `كارت ${currentCardIndex + 1} من ${session.cards.length}`;
+        document.getElementById("progress-fill").style.width =
+          `${((currentCardIndex + 1) / session.cards.length) * 100}%`;
+
+        const badge = document.getElementById("depth-badge");
+        badge.className = `depth-badge ${card.depthClass}`;
+        badge.innerText = card.depth;
+
+        document.getElementById("psych-goal").innerText = `الهدف: ${card.goal}`;
+        document.getElementById("question-text").innerText = card.q;
+
+        // Toggle Out-of-Game vs In-Game Response UI
+        const outArea = document.getElementById("out-game-area");
+        const inArea = document.getElementById("in-game-area");
+
+        if (playMode === "out") {
+          outArea.style.display = "block";
+          inArea.style.display = "none";
+        } else {
+          outArea.style.display = "none";
+          inArea.style.display = "flex";
+          renderInGameResponseBoxes();
+        }
+
+        document.getElementById("prev-btn").disabled = currentCardIndex === 0;
+        document.getElementById("next-btn").innerText =
+          currentCardIndex === session.cards.length - 1
+            ? "إنهاء القعدة ✨"
+            : "السؤال التالي ⬅";
+      }
+
+      function renderInGameResponseBoxes() {
+        const inArea = document.getElementById("in-game-area");
+        const key = getCardKey(
+          currentMoodIndex,
+          currentSessionIndex,
+          currentCardIndex,
+        );
+        const saved = savedResponses[key] || { p1: "", p2: "" };
+
+        // Order boxes so the randomly selected starter appears first!
+        const order = currentStarter === 1 ? ["p1", "p2"] : ["p2", "p1"];
+        inArea.innerHTML = "";
+
+        order.forEach((pKey, idx) => {
+          const pName = pKey === "p1" ? partnerNames.p1 : partnerNames.p2;
+          const isFirst = idx === 0;
+          const ansText = saved[pKey] || "";
+          const isEditing = editingState[pKey] || !ansText;
+
+          const box = document.createElement("div");
+          box.className = `partner-response-box ${isFirst ? "first-turn" : ""}`;
+
+          let contentHTML = "";
+          if (isEditing) {
+            contentHTML = `
+                    <textarea id="input-${pKey}" class="pr-textarea" placeholder="اكتب إجابة ${pName} هنا...">${ansText}</textarea>
+                    <div class="pr-actions">
+                        <button class="btn-small btn-save" onclick="saveAnswer('${pKey}')">💾 حفظ الرد</button>
+                        ${ansText ? `<button class="btn-small btn-delete" onclick="cancelEdit('${pKey}')">إلغاء</button>` : ""}
+                    </div>
+                `;
+          } else {
+            contentHTML = `
+                    <div class="saved-answer-display">${ansText}</div>
+                    <div class="pr-actions">
+                        <button class="btn-small btn-edit" onclick="enableEdit('${pKey}')">✏️ تعديل</button>
+                        <button class="btn-small btn-delete" onclick="deleteAnswer('${pKey}')">🗑️ حذف</button>
+                    </div>
+                `;
+          }
+
+          box.innerHTML = `
+                <div class="pr-header">
+                    <span class="pr-name">
+                        👤 إجابة ${pName}
+                        <span class="turn-tag">${isFirst ? "يبدأ أولاً 🎲" : "يجيب ثانياً"}</span>
+                    </span>
+                </div>
+                ${contentHTML}
+            `;
+          inArea.appendChild(box);
+        });
+      }
+
+      function saveAnswer(pKey) {
+        const textarea = document.getElementById(`input-${pKey}`);
+        if (!textarea) return;
+        const val = textarea.value.trim();
+        if (!val) return;
+
+        const key = getCardKey(
+          currentMoodIndex,
+          currentSessionIndex,
+          currentCardIndex,
+        );
+        const mood = gameData[currentMoodIndex];
+        const session = mood.sessions[currentSessionIndex];
+        const card = session.cards[currentCardIndex];
+
+        if (!savedResponses[key]) {
+          savedResponses[key] = {
+            p1: "",
+            p2: "",
+            q: card.q,
+            moodTitle: mood.title,
+            sessionTitle: session.title,
+            timestamp: new Date().toLocaleDateString("ar-EG"),
+          };
+        }
+
+        savedResponses[key][pKey] = val;
+        editingState[pKey] = false;
+        localStorage.setItem("kalam_responses", JSON.stringify(savedResponses));
+        updateSavedCount();
+        renderInGameResponseBoxes();
+      }
+
+      function enableEdit(pKey) {
+        editingState[pKey] = true;
+        renderInGameResponseBoxes();
+      }
+
+      function cancelEdit(pKey) {
+        editingState[pKey] = false;
+        renderInGameResponseBoxes();
+      }
+
+      function deleteAnswer(pKey, customKey = null) {
+        const key =
+          customKey ||
+          getCardKey(currentMoodIndex, currentSessionIndex, currentCardIndex);
+        if (!savedResponses[key]) return;
+
+        savedResponses[key][pKey] = "";
+        if (!savedResponses[key].p1 && !savedResponses[key].p2) {
+          delete savedResponses[key];
+        }
+
+        localStorage.setItem("kalam_responses", JSON.stringify(savedResponses));
+        updateSavedCount();
+
+        if (customKey) {
+          renderMemories();
+        } else {
+          editingState[pKey] = false;
+          renderInGameResponseBoxes();
+        }
+      }
+
+      function updateSavedCount() {
+        const keys = Object.keys(savedResponses);
+        document.getElementById("saved-count").innerText = keys.length;
+      }
+
+      function renderMemories() {
+        const container = document.getElementById("memories-container");
+        const keys = Object.keys(savedResponses);
+
+        if (keys.length === 0) {
+          container.innerHTML = `
+                <div class="empty-state">
+                    <div style="font-size:40px; margin-bottom:10px;">📖</div>
+                    <h3 style="margin-bottom:6px; color:var(--primary-dark);">لا توجد ردود محفوظة بعد</h3>
+                    <p style="font-size:13px;">ابدأوا أي قعدة في وضع «الرد داخل اللعبة» واحفظوا إجاباتكم لتظهر هنا كذكرى دائمة.</p>
+                </div>
+            `;
+          return;
+        }
+
+        container.innerHTML = "";
+        keys.forEach((key) => {
+          const item = savedResponses[key];
+          const card = document.createElement("div");
+          card.className = "memory-card";
+
+          let answersHTML = "";
+          ["p1", "p2"].forEach((pKey) => {
+            const pName = pKey === "p1" ? partnerNames.p1 : partnerNames.p2;
+            const ans = item[pKey];
+            if (ans) {
+              answersHTML += `
+                        <div class="memory-ans-item">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                                <strong style="color:var(--secondary-teal);">👤 ${pName}:</strong>
+                                <div class="pr-actions">
+                                    <button class="btn-small btn-edit" onclick="editMemoryPrompt('${key}', '${pKey}')">✏️ تعديل</button>
+                                    <button class="btn-small btn-delete" onclick="deleteAnswer('${pKey}', '${key}')">🗑️ حذف</button>
+                                </div>
+                            </div>
+                            <div id="mem-text-${key}-${pKey}" style="white-space:pre-wrap; line-height:1.5;">${ans}</div>
+                        </div>
+                    `;
+            }
+          });
+
+          card.innerHTML = `
+                <div class="memory-meta">${item.moodTitle || ""} • ${item.sessionTitle || ""}</div>
+                <div class="memory-q">${item.q}</div>
+                <div class="memory-answers">${answersHTML}</div>
+            `;
+          container.appendChild(card);
+        });
+      }
+
+      function editMemoryPrompt(key, pKey) {
+        const container = document.getElementById(`mem-text-${key}-${pKey}`);
+        if (!container) return;
+        const currentVal = savedResponses[key][pKey];
+
+        container.innerHTML = `
+            <textarea id="mem-input-${key}-${pKey}" class="pr-textarea" style="margin-top:6px;">${currentVal}</textarea>
+            <div class="pr-actions">
+                <button class="btn-small btn-save" onclick="saveMemoryEdit('${key}', '${pKey}')">💾 حفظ التعديل</button>
+                <button class="btn-small btn-delete" onclick="renderMemories()">إلغاء</button>
+            </div>
+        `;
+      }
+
+      function saveMemoryEdit(key, pKey) {
+        const input = document.getElementById(`mem-input-${key}-${pKey}`);
+        if (!input) return;
+        const newVal = input.value.trim();
+        if (!newVal) return;
+
+        savedResponses[key][pKey] = newVal;
+        localStorage.setItem("kalam_responses", JSON.stringify(savedResponses));
+        renderMemories();
+      }
+
+      function nextCard() {
+        const session =
+          gameData[currentMoodIndex].sessions[currentSessionIndex];
+        if (currentCardIndex < session.cards.length - 1) {
+          currentCardIndex++;
+          updateCardUI(true);
+        } else {
+          if (!completedSessions.includes(session.id)) {
+            completedSessions.push(session.id);
+            localStorage.setItem(
+              "kalam_completed_v2",
+              JSON.stringify(completedSessions),
+            );
+          }
+          goHome();
+        }
+      }
+
+      function prevCard() {
+        if (currentCardIndex > 0) {
+          currentCardIndex--;
+          updateCardUI(true);
+        }
+      }
+
+      function goHome() {
+        document.getElementById("session-view").classList.remove("active");
+        document.getElementById("main-nav").style.display = "flex";
+        switchTab("moods");
+      }
+
+      // Start App
+      initApp();
+    </script>
+  </body>
+</html>
