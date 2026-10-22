@@ -2195,6 +2195,19 @@
         document.getElementById("app-status").innerText = message;
       }
 
+      function getAccountLoadErrorMessage(error) {
+        const message = error?.message || String(error);
+        if (
+          message.includes("Could not find the table") &&
+          (message.includes("public.couples") ||
+            message.includes("public.shared_sessions") ||
+            message.includes("public.shared_answers"))
+        ) {
+          return `قاعدة بيانات Supabase غير مجهزة بعد. افتح SQL Editor في المشروع نفسه المستخدم في supabase-config.js، ونفّذ كامل ملف supabase-schema.sql، ثم أعد تحميل الصفحة. تفاصيل Supabase: ${message}`;
+        }
+        return `تعذر تحميل الحساب: ${message}`;
+      }
+
       function getAuthRedirectUrl() {
         const redirectUrl = new URL(location.pathname, location.origin);
         const shareToken = new URLSearchParams(location.search).get("share");
@@ -2269,7 +2282,7 @@
               setAuthStatus("أدخل كلمة مرور جديدة لحسابكما.");
             } else if (session) {
               loadAccount(session.user).catch((error) =>
-                setAuthStatus(`تعذر تحميل الحساب: ${error.message}`),
+                setAuthStatus(getAccountLoadErrorMessage(error)),
               );
             } else {
               clearAccount();
@@ -2288,7 +2301,7 @@
             }
           })
           .catch((error) =>
-            setAuthStatus(`تعذر استعادة تسجيل الدخول: ${error.message}`),
+            setAuthStatus(getAccountLoadErrorMessage(error)),
           );
       }
 
